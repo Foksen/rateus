@@ -2,9 +2,9 @@
 
 import { signOut, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, Fragment } from "react";
+import { useEffect, Suspense } from "react";
 
-export default function LogoutCallback() {
+function LogoutCallbackInner() {
   const { status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -17,6 +17,12 @@ export default function LogoutCallback() {
       router.replace(redirectTo);
     }
   }, [status, router]);
+}
 
-  return <Fragment />;
+export default function LogoutCallback() {
+  return (
+    <Suspense>
+      <LogoutCallbackInner />
+    </Suspense>
+  );
 }

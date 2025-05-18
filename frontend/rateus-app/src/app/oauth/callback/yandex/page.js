@@ -3,9 +3,9 @@
 import { loginWithYandex } from "@/lib/api/auth";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, Fragment } from "react";
+import { useEffect, Suspense } from "react";
 
-export default function YandexCallback() {
+function YandexCallbackInner() {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -33,6 +33,12 @@ export default function YandexCallback() {
 
     sendCode();
   }, [params, router]);
+}
 
-  return <Fragment />;
+export default function YandexCallback() {
+  return (
+    <Suspense>
+      <YandexCallbackInner />
+    </Suspense>
+  );
 }
