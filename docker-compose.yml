@@ -11,7 +11,7 @@ services:
       - rateus_db_data:/var/lib/postgresql/data
 
   nextjs:
-    build: .
+    build: ./frontend/rateus-app
     ports:
       - "3000:3000"
     environment:
