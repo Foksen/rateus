@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:16
+    container_name: postgres
     environment:
       POSTGRES_DB: ${RATEUS_DB}
       POSTGRES_USER: ${RATEUS_USER}
@@ -10,16 +11,25 @@ services:
     volumes:
       - rateus_db_data:/var/lib/postgresql/data
 
+  spring:
+    build: ./backend/core
+    container_name: spring
+    environment:
+      BACKEND_PG_HOST: postgres
+      BACKEND_PG_PORT: 5432
+      RATEUS_DB: ${RATEUS_DB}
+      RATEUS_USER: ${RATEUS_USER}
+      RATEUS_PASSWORD: ${RATEUS_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      YANDEX_CLIENT_ID: ${YANDEX_CLIENT_ID}
+      YANDEX_CLIENT_SECRET: ${YANDEX_CLIENT_SECRET}
+
   nextjs:
     build: ./frontend/rateus-app
-    ports:
-      - "3000:3000"
+    container_name: nextjs
     environment:
       NEXTAUTH_URL: ${NEXTAUTH_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      NEXT_PUBLIC_RATEUS_URL: ${NEXT_PUBLIC_RATEUS_URL}
-      NEXT_PUBLIC_RATEUS_BACKEND_URL: ${NEXT_PUBLIC_RATEUS_BACKEND_URL}
-      NEXT_PUBLIC_YANDEX_CLIENT_ID: ${NEXT_PUBLIC_YANDEX_CLIENT_ID}
 
   nginx:
     image: nginx:alpine
@@ -30,7 +40,8 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - nextjs
-      # - spring
+      - spring
+    restart: always
 
 volumes:
   rateus_db_data:
