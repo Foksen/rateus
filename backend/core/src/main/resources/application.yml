@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: rateus-app
+  datasource:
+    url: jdbc:postgresql://${BACKEND_PG_HOST}:${BACKEND_PG_PORT}/${RATEUS_DB}
+    username: ${RATEUS_USER}
+    password: ${RATEUS_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+
+logging:
+  level:
+    root: DEBUG

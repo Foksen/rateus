@@ -6,7 +6,8 @@ export function SettingsContainer({ session }) {
     <ProfilePageView
       title="Настройки"
       description="На этой странице вы можете изменить настройки своего аккаунта"
-      content={<SettingsContent session={session}/>}
+      content={<SettingsContent session={session} />}
+      maxW="5xl"
     />
   );
 }

@@ -1,17 +1,18 @@
-import { Text } from "@chakra-ui/react";
+import { OrganizationsContainer } from "@/components/organizations/organizations-container";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
+import { Fragment } from "react";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import { Header } from "@/components/common/header/header";
 
-export default async function Home() {
+export default async function OrganizationsPage() {
   const session = await getServerSession(authOptions);
 
   return (
-    <main>
-      <Text>Привет, {session?.user?.username || "незнакомец"}</Text>
-      <Link href="/auth">Авторизация</Link>
-      <br />
-      <Link href="/profile">Профиль</Link>
-    </main>
+    <Fragment>
+      <Header session={session} />
+      <main>
+        <OrganizationsContainer />
+      </main>
+    </Fragment>
   );
 }

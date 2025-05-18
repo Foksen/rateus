@@ -1,4 +1,4 @@
-import { loginUser } from "@/lib/api/auth";
+import { loginWithEmail } from "@/lib/api/auth";
 import { parseJwt } from "@/lib/utils/parseJwt";
 import nextAuthModule from "next-auth";
 import credentialsProviderModule from "next-auth/providers/credentials";
@@ -13,26 +13,33 @@ export const authOptions = {
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
+        token: { label: "Token", type: "text" },
       },
       async authorize(credentials) {
         try {
-          const response = await loginUser(
-            credentials.email,
-            credentials.password,
-            credentials.code
-          );
-
-          if (!response || !response.access || !response.refresh) {
-            const error = new Error(
-              "Invalid response from server during authentication"
-            );
-            error.data = response.detail;
-            throw error;
+          let token;
+          if (credentials.token) {
+            token = credentials.token;
+          } else {
+            const response = await loginWithEmail({
+              email: credentials.email,
+              password: credentials.password,
+            });
+            if (!response || !response.token) {
+              console.log(response);
+              const error = new Error(
+                "Invalid response from server during authentication"
+              );
+              error.data.message = response?.data?.message;
+              throw error;
+            }
+            token = response.token;
           }
 
+          const user = parseJwt(token);
           return {
-            accessToken: response.access,
-            refreshToken: response.refresh,
+            token,
+            ...user,
           };
         } catch (error) {
           console.error("Authorization failed", error);
@@ -52,45 +59,34 @@ export const authOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.accessToken;
-        token.refreshToken = user.refreshToken;
-        const decoded = parseJwt(user.accessToken);
-        token.user = {
-          id: decoded?.user_id,
-          email: decoded?.email,
-          username: decoded?.username,
-          role: decoded?.role,
-        };
+        token.token = user.token;
+        token.uid = user.sub || user.uid;
+        token.email = user.email;
+        token.name = user.name;
+        token.surname = user.surname;
+        token.role = user.role;
+        token.avatarUrl = user.avatarUrl;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user = { ...token.user };
-      session.accessToken = token.accessToken;
+      session.user = {
+        uid: token.uid,
+        email: token.email,
+        name: token.name,
+        surname: token.surname,
+        role: token.role,
+        avatarUrl: token.avatarUrl,
+      };
+      session.token = token.token;
       return session;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/auth",
+    signIn: "/auth/sign-in",
   },
 };
-
-// export const authOptions = {
-//   providers: [
-//     GitHubProvider({
-//       clientId: process.env.GITHUB_CLIENT_ID,
-//       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-//     }),
-//     GoogleProvider({
-//       clientId: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//     }),
-//   ],
-//   secret: process.env.NEXTAUTH_SECRET,
-//   pages: {
-//     signIn: "/auth",
-//   },
-// };
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

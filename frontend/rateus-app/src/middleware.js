@@ -10,9 +10,9 @@ const secret = process.env.NEXTAUTH_SECRET;
 export async function middleware(req) {
   const { pathname } = req.nextUrl;
 
-  const token = await getToken({ req, secret });
+  const user = await getToken({ req, secret });
 
-  const isAuth = !!token;
+  const isAuth = !!user;
 
   // If is already authenticated
   const isAuthPath = pathname.startsWith("/auth");
@@ -24,16 +24,16 @@ export async function middleware(req) {
   // If is not authenticated
   const isProfilePath = pathname.startsWith("/profile");
 
-  const isProtectedPath = isProfilePath; // in future use with "... || otherPath || otherPath ...""
+  const isProtectedPath = isProfilePath; // in future use with "...  otherPath  otherPath ...""
 
   if (isProtectedPath && !isAuth) {
     return NextResponse.redirect(new URL("/auth", req.url));
   }
 
   // If profile path
-  if (isProtectedPath) {
+  if (isProfilePath) {
     const profilePage = pathname.split("/").filter(Boolean)[1] || "";
-    const userRole = token?.user?.role;
+    const userRole = user?.role;
     const userAvailablePages = PROFILE_PAGE_AUTHORITIES[userRole];
 
     if (
@@ -50,5 +50,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/auth"],
+  matcher: ["/profile/:path*", "/auth/:path*"],
 };

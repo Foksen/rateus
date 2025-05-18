@@ -3,7 +3,7 @@ export async function backendFetch(
   { method = "GET", data = null, accessToken = null, params = null } = {}
 ) {
   const baseUrl =
-    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+    process.env.NEXT_PUBLIC_RATEUS_BACKEND_URL || "http://localhost:8080";
 
   const headers = {
     "Content-Type": "application/json",

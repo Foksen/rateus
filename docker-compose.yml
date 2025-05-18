@@ -1,0 +1,14 @@
+services:
+  rateus_db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${RATEUS_DB}
+      POSTGRES_USER: ${RATEUS_USER}
+      POSTGRES_PASSWORD: ${RATEUS_PASSWORD}
+    ports:
+      - "5433:5432" # TO REMOVE
+    volumes:
+      - rateus_db_data:/var/lib/postgresql/data
+
+volumes:
+  rateus_db_data:

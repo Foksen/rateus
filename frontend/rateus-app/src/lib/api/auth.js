@@ -1,7 +1,7 @@
 import { backendFetch } from "./fetcher";
 
-export async function registerUser(data) {
-  return backendFetch("/api/users/register/", {
+export async function registerUserWithEmail(data) {
+  return backendFetch("/api/auth/sign-up/email", {
     method: "POST",
     data: data,
   });
@@ -18,9 +18,16 @@ export async function loginUser(email, password, code) {
   });
 }
 
-export async function googleLogin(idToken) {
-  return backendFetch("/api/users/google-login/", {
+export async function loginWithEmail(data) {
+  return backendFetch("/api/auth/sign-in/email", {
     method: "POST",
-    data: { id_token: idToken },
+    data: data,
+  });
+}
+
+export async function loginWithYandex(code) {
+  return backendFetch("/api/auth/sign-in/yandex", {
+    method: "POST",
+    data: { code },
   });
 }

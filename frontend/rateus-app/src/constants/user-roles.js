@@ -1,16 +1,19 @@
 export const USER_ROLE = {
-  CLIENT: "CLIENT",
-  MASTER: "MASTER",
+  USER: "USER",
+  OWNER: "OWNER",
   MODERATOR: "MODERATOR",
+  ADMIN: "ADMIN",
 };
 
-export function roleToView(role) {
+export function mapRoleName(role) {
   switch (role) {
-    case USER_ROLE.CLIENT:
-      return "Клиент";
-    case USER_ROLE.MASTER:
-      return "Мастер";
+    case USER_ROLE.USER:
+      return "Пользователь";
+    case USER_ROLE.OWNER:
+      return "Владелец";
     case USER_ROLE.MODERATOR:
+      return "Модератор";
+    case USER_ROLE.ADMIN:
       return "Администратор";
   }
   return "Неизвестно";

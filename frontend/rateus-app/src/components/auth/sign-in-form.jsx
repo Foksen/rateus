@@ -1,143 +1,109 @@
+"use client";
+
 import {
   Button,
   ButtonGroup,
-  Dialog,
   Field,
   Fieldset,
   Heading,
   Input,
-  Link,
-  PinInput,
-  Portal,
+  Link as ChakraLink,
   Separator,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { PasswordInput } from "../ui/password-input";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa6";
-import { Controller } from "react-hook-form";
-import { ACCENT_COLOR } from "@/constants/ui";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { yandexOAuthRedirect } from "@/lib/api/yandex";
+import { mapSignInErrors } from "@/lib/utils/map-errors";
 
-const Dialog2fa = ({ control, codeError, onSubmit, resetField }) => (
-  <Dialog.Root defaultOpen={true} onExitComplete={() => resetField("code")}>
-    <Portal>
-      <Dialog.Backdrop />
-      <Dialog.Positioner>
-        <Dialog.Content>
-          <Dialog.Header>
-            <Dialog.Title textStyle="2xl">Подтверждение входа</Dialog.Title>
-          </Dialog.Header>
-          <Dialog.Body>
-            <VStack gap="4">
-              <Text>
-                Для обеспечения безопасности вашего аккаунта мы отправили
-                одноразовый код на вашу почту. Введите его чтобы войти
-              </Text>
-              <Text>
-                Если письмо долго не приходит попробуйте ещё раз или обратитесь
-                в службу поддержки
-              </Text>
-              <Field.Root
-                mt="4"
-                alignItems="center"
-                gap="4"
-                invalid={codeError}
-              >
-                <Controller
-                  control={control}
-                  name="code"
-                  render={({ field }) => (
-                    <PinInput.Root
-                      size="xl"
-                      placeholder="o"
-                      value={field.value}
-                      onValueChange={(e) => {
-                        field.onChange(e.value);
+export function SignInForm({}) {
+  const router = useRouter();
 
-                        const code = e.value.join("");
-                        if (code.length == 6) {
-                          onSubmit();
-                        }
-                      }}
-                    >
-                      <PinInput.HiddenInput />
-                      <PinInput.Control>
-                        <PinInput.Input index={0} />
-                        <PinInput.Input index={1} />
-                        <PinInput.Input index={2} />
-                        <PinInput.Input index={3} />
-                        <PinInput.Input index={4} />
-                        <PinInput.Input index={5} />
-                      </PinInput.Control>
-                    </PinInput.Root>
-                  )}
-                />
-                <Field.ErrorText>{codeError}</Field.ErrorText>
-              </Field.Root>
-            </VStack>
-          </Dialog.Body>
-          <Dialog.Footer></Dialog.Footer>
-        </Dialog.Content>
-      </Dialog.Positioner>
-    </Portal>
-  </Dialog.Root>
-);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { isValid, errors },
+  } = useForm({ mode: "onSubmit" });
 
-export function SignInForm({
-  handleToggleForm,
-  login,
-  loginControl,
-  resetField,
-  onSubmit,
-  errors,
-  isValid,
-  isLoginSubmitLoading,
-  handleGoogleSignIn,
-  handleGitHubSignIn,
-  isLogin2faOpen,
-}) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmit = handleSubmit(async (data) => {
+    setIsLoading(true);
+
+    const params = {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    };
+
+    const response = await signIn("credentials", { ...params });
+    if (response.ok) {
+      router.push("/");
+    } else {
+      setIsLoading(false);
+      const errorData = JSON.parse(decodeURIComponent(response.error)).data;
+      const errorMessage = mapSignInErrors(errorData?.message).global;
+      setError("root", {
+        message: errorMessage,
+      });
+    }
+
+    setIsLoading(false);
+  });
+
   const rootError = errors?.root?.message;
-  const emailError = errors?.email?.message;
-  const passwordError = errors?.password?.message;
-  const codeError = errors?.code?.message;
 
   return (
-    <VStack w="md" mb="10" as="form" onSubmit={onSubmit}>
+    <VStack
+      w="lg"
+      mb="6"
+      as="form"
+      bg="bg"
+      p="14"
+      rounded="md"
+      borderWidth="1px"
+      borderColor="border.muted"
+      onSubmit={onSubmit}
+    >
       <Heading size="3xl" mb="3">
         Вход
       </Heading>
       <Fieldset.Root invalid={rootError}>
         <Fieldset.Content>
-          <Field.Root invalid={emailError}>
+          <Field.Root>
             <Field.Label>Почта</Field.Label>
             <Input
-              {...login("email", {
+              type="email"
+              placeholder="email@example.com"
+              {...register("email", {
                 required: "Введите почту",
               })}
-              placeholder="email@example.com"
-              type="email"
             />
-            <Field.ErrorText>{emailError}</Field.ErrorText>
           </Field.Root>
-          <Field.Root invalid={passwordError}>
+          <Field.Root>
             <Field.Label>Пароль</Field.Label>
             <PasswordInput
-              {...login("password", {
+              placeholder="qwerty123"
+              {...register("password", {
                 required: "Введите пароль",
               })}
-              placeholder="qwerty123"
             />
-            <Field.ErrorText>{passwordError}</Field.ErrorText>
           </Field.Root>
 
           <Button
             mt="8"
             type="submit"
             disabled={!isValid}
-            loading={isLoginSubmitLoading || null}
+            loading={isLoading}
             loadingText="Войти"
-            colorPalette={ACCENT_COLOR}
           >
             Войти
           </Button>
@@ -148,33 +114,29 @@ export function SignInForm({
 
       <Text mt="4" fontWeight="medium" textStyle="sm" alignSelf="center">
         Ещё нет аккаунта?&nbsp;
-        <Link variant="underline" onClick={handleToggleForm}>
-          Зарегистрироваться
-        </Link>
+        <ChakraLink variant="underline" outline="none" asChild>
+          <Link href="/auth/sign-up">Зарегистрироваться</Link>
+        </ChakraLink>
       </Text>
 
-      {/* <Separator my="4" w="full" />
+      <Separator my="4" w="full" />
 
-      <ButtonGroup grow>
-        <Button variant="subtle" onClick={handleGoogleSignIn} disabled>
+      <ButtonGroup w="full" grow>
+        {/* <Button variant="subtle" onClick={null}>
           <FcGoogle />
           Войти через Google
-        </Button>
+        </Button> */}
 
-        <Button variant="subtle" onClick={handleGitHubSignIn} disabled>
-          <FaGithub />
-          Войти через GitHub
+        <Button variant="subtle" onClick={yandexOAuthRedirect}>
+          <Image
+            alt="yandex"
+            width="20"
+            height="20"
+            src="/svg/YandexIcon.svg"
+          />
+          Войти через Яндекс
         </Button>
-      </ButtonGroup> */}
-
-      {isLogin2faOpen && (
-        <Dialog2fa
-          control={loginControl}
-          codeError={codeError}
-          onSubmit={onSubmit}
-          resetField={resetField}
-        />
-      )}
+      </ButtonGroup>
     </VStack>
   );
 }

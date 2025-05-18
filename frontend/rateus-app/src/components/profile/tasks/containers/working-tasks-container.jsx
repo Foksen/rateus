@@ -8,7 +8,6 @@ import {
   getTaskFilterStatus,
   TaskFilters,
 } from "./../filters/task-filters";
-import { getTasks } from "@/lib/api/tasks";
 import debounce from "debounce";
 import { mapFilters } from "@/lib/utils/map-filters";
 import { DEBOUNCE_WAIT_MS } from "@/constants/api";

@@ -1,20 +1,18 @@
 import { PROFILE_COMMON_PAGE, PROFILE_PAGE } from "@/constants/profile-pages";
 import { SettingsContainer } from "./settings/settings-container";
-import {
-  getCategories,
-  getCategoriesInfos,
-  getServiceCenters,
-  getServiceCentersInfos,
-  getTasks,
-} from "@/lib/api/tasks";
 import { TasksContainer } from "./tasks/containers/tasks-container";
 import { ClientTasksContainer } from "./tasks/containers/client-tasks-container";
 import { WorkingTasksContainer } from "./tasks/containers/working-tasks-container";
 import { UsersContainer } from "./users/users-conainter";
-import { getUserInfos } from "@/lib/api/user";
-import { CategoriesContainer } from "./categories/categories-container";
-import { ServiceCentersContainer } from "./service-centers/service-centers-container";
-import { NotificationsContainer } from "./notifications/notifications-container";
+import { OrganizationTypesContainer } from "./organization-types/organization-types-container";
+import {
+  getAvailableOrganizationTypes,
+  getOrganizationTypes,
+  getSelfOrganization,
+  getSelfOrganizations,
+} from "@/lib/api/organizations";
+import { OrganizationsSelfContainer } from "./organizations-self/organizations-self-container";
+import { OrganizationSaveContainer } from "./organization-save/organization-save-containter";
 
 const fetchTasks = async (session) => {
   try {
@@ -56,133 +54,67 @@ const fetchServiceCenters = async (filters) => {
   }
 };
 
-const fetchUserInfos = async (session) => {
-  try {
-    const result = await getUserInfos(session.accessToken);
-    return result.results;
-  } catch (error) {
-    console.error("Error fetching user infos: ", error);
-  }
-};
-
-const fetchCategoriesInfos = async (session) => {
-  try {
-    const result = await getCategoriesInfos(session.accessToken);
-    return result.results;
-  } catch (error) {
-    console.error("Error fetching categories infos: ", error);
-  }
-};
-
-const fetchServiceCentersInfos = async (session) => {
-  try {
-    const result = await getServiceCentersInfos(session.accessToken);
-    return result.results;
-  } catch (error) {
-    console.error("Error fetching service centers infos: ", error);
-  }
-};
-
-const notifications = [
-  {
-    id: 1,
-    task_id: 1,
-    user_id: 1,
-    sender_id: 1,
-    title: "Статус заявки изменён",
-    message:
-      'Мастер Иван изменил статус вашей заявки (Сломался экран телефона) на "В работе"',
-    is_new: false,
-    created_at: "05.05.2025 14:30",
-  },
-  {
-    id: 1,
-    task_id: 1,
-    user_id: 1,
-    sender_id: 1,
-    title: "Статус заявки изменён",
-    message:
-      'Мастер Иван изменил статус вашей заявки (Сломался экран телефона) на "В работе"',
-    is_new: false,
-    created_at: "01.01.1970 00:00",
-  },
-  {
-    id: 1,
-    task_id: 1,
-    user_id: 1,
-    sender_id: 1,
-    title: "Статус заявки изменён",
-    message:
-      'Мастер Иван изменил статус вашей заявки (Сломался экран телефона) на "В работе"',
-    is_new: false,
-    created_at: "06.05.2025 14:20",
-  },
-];
+// const fetchOrganizationTypes = async (session) => {
+//   try {
+//     const result = await getCategoriesInfos(session.accessToken);
+//     return result.results;
+//   } catch (error) {
+//     console.error("Error fetching categories infos: ", error);
+//   }
+// };
 
 export async function ProfilePageContainer({ profilePage, session }) {
-  switch (profilePage) {
-    case PROFILE_PAGE.TASKS:
-      return (
-        <TasksContainer
-          session={session}
-          initialTasks={await fetchTasks(session)}
-          initialCategories={await fetchCategories({ published: true })}
-          initialServiceCenters={await fetchServiceCenters({ published: true })}
-        />
-      );
-
-    case PROFILE_PAGE.CLIENT_TASKS:
-      const initialClientTasks = await fetchTasks(session);
-      return (
-        <ClientTasksContainer
-          session={session}
-          initialTasks={initialClientTasks}
-          initialCategories={await fetchCategories()}
-          initialServiceCenters={await fetchServiceCenters()}
-        />
-      );
-
-    case PROFILE_PAGE.WORKING_TASTS:
-      return (
-        <WorkingTasksContainer
-          session={session}
-          initialTasks={await fetchMasterTasks(session)}
-          initialCategories={await fetchCategories()}
-          initialServiceCenters={await fetchServiceCenters()}
-        />
-      );
-
-    case PROFILE_PAGE.USERS:
-      return (
-        <UsersContainer
-          initialUserInfos={await fetchUserInfos(session)}
-          session={session}
-        />
-      );
-
-    case PROFILE_PAGE.CATEGORIES:
-      return (
-        <CategoriesContainer
-          session={session}
-          initialCategoriesInfos={await fetchCategoriesInfos(session)}
-        />
-      );
-
-    case PROFILE_PAGE.SERVICE_CENTERS:
-      return (
-        <ServiceCentersContainer
-          session={session}
-          initialServiceCentersInfos={await fetchServiceCentersInfos(session)}
-        />
-      );
-
-    case PROFILE_COMMON_PAGE.SETTINGS:
-      return <SettingsContainer session={session} />;
-
-    case PROFILE_COMMON_PAGE.NOTIFICATIONS:
-      return <NotificationsContainer initialNotifications={notifications} />;
-
-    default:
-      return null;
+  if (!Array.isArray(profilePage)) {
+    return null;
   }
+
+  if (profilePage[0] === PROFILE_PAGE.ORGANIZATIONS_SELF) {
+    if (profilePage[1] === "save") {
+      const id = profilePage[2];
+      if (id === "new") {
+        return (
+          <OrganizationSaveContainer
+            session={session}
+            initialOrganizationTypes={
+              (await getAvailableOrganizationTypes()).organizationTypes
+            }
+          />
+        );
+      }
+      return (
+        <OrganizationSaveContainer
+          session={session}
+          initialOrganizationTypes={
+            (await getAvailableOrganizationTypes()).organizationTypes
+          }
+          initialOrganization={await getSelfOrganization(session.token, id)}
+        />
+      );
+    }
+
+    return (
+      <OrganizationsSelfContainer
+        organizations={
+          (await getSelfOrganizations(session.token)).organizations
+        }
+      />
+    );
+  }
+
+  if (profilePage[0] === PROFILE_PAGE.ORGANIZATION_TYPES) {
+    return (
+      <OrganizationTypesContainer
+        session={session}
+        initialOrganizationTypes={
+          (await getOrganizationTypes()).organizationTypes
+        }
+      />
+    );
+  }
+
+  if (profilePage[0] === PROFILE_COMMON_PAGE.SETTINGS) {
+    return <SettingsContainer session={session} />;
+  }
+
+  return null;
 }

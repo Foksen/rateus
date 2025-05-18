@@ -1,4 +1,4 @@
-export const ACCENT_COLOR = "yellow";
+export const ACCENT_COLOR = "purple";
 
 export const RAINBOW_AVATAR_COLORS = false;
 

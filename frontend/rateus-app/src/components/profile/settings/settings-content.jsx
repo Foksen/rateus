@@ -10,13 +10,14 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { SidebarProfile } from "../profile-sidebar-view";
+import { SidebarProfile } from "../sidebar/profile-sidebar-view";
 import { SettingsActionChangeUsername } from "./actions/settings-action-change-username";
 import { SettingsActionChangePassword } from "./actions/settings-action-change-password";
 import { SettingsActionChangeEmail } from "./actions/settings-action-change-email";
 
 export function SettingsContent({ session }) {
-  const [username, setUsername] = useState(session?.user?.username);
+  const [name, setName] = useState(session?.user?.name);
+  const [surname, setSurname] = useState(session?.user?.surname);
   const [email, setEmail] = useState(session?.user?.email);
 
   return (
@@ -28,7 +29,7 @@ export function SettingsContent({ session }) {
         </Alert.Title>
       </Alert.Root>
 
-      <Stack mt="6" maxW="2xl">
+      <Stack mt="6">
         <Fieldset.Root size="lg">
           <Fieldset.Legend>Настройки аккаунта</Fieldset.Legend>
 
@@ -38,12 +39,14 @@ export function SettingsContent({ session }) {
               <HStack w="full" justifyContent="space-between">
                 <SidebarProfile
                   size="md"
-                  username={username}
+                  username={`${name} ${surname}`}
                   role={session?.user?.role}
+                  useravatar={session?.user?.avatarUrl}
                 />
                 <SettingsActionChangeUsername
                   session={session}
-                  setUsername={setUsername}
+                  setName={setName}
+                  setSurname={setSurname}
                 />
               </HStack>
             </Field.Root>
