@@ -1,6 +1,7 @@
 package ru.mirea.core.auth.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,9 @@ public class SecurityConfiguration {
     @Autowired
     private AuthTokenFilter authTokenFilter;
 
+    @Value("${cors.allowed.origin}")
+    private String corsAllowedOrigin;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -29,6 +33,7 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
                     configuration.addAllowedOrigin("http://localhost:3000");
+                    configuration.addAllowedOrigin(corsAllowedOrigin);
                     configuration.addAllowedMethod("*");
                     configuration.addAllowedHeader("*");
                     configuration.setAllowCredentials(true);

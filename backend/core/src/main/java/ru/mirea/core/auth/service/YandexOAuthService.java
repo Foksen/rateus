@@ -12,10 +12,10 @@ import ru.mirea.core.auth.dto.YandexTokenResponse;
 @Service
 public class YandexOAuthService {
 
-    @Value("${YANDEX_CLIENT_ID}")
+    @Value("${yandex.client.id}")
     private String clientId;
 
-    @Value("${YANDEX_CLIENT_SECRET}")
+    @Value("${yandex.client.secret}")
     private String clientSecret;
 
     private final String url = "https://oauth.yandex.ru/token";

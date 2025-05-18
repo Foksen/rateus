@@ -27,7 +27,7 @@ export async function middleware(req) {
   const isProtectedPath = isProfilePath; // in future use with "...  otherPath  otherPath ...""
 
   if (isProtectedPath && !isAuth) {
-    return NextResponse.redirect(new URL("/auth", req.url));
+    return NextResponse.redirect(new URL("/auth/sign-in", req.url));
   }
 
   // If profile path

@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/nextauth/[...nextauth]/route";
 import { Header } from "@/components/common/header/header";
 import { OrganizationSlugContainer } from "@/components/organizations/slug/organization-slug-container";
 import { getServerSession } from "next-auth";

@@ -21,6 +21,14 @@ jwt:
   secret: ${JWT_SECRET}
   expiration: 86400000
 
+yandex:
+  oauth:
+    client.id: ${YANDEX_CLIENT_ID}
+    client.secret: ${YANDEX_CLIENT_SECRET}
+
 logging:
   level:
     root: DEBUG
+
+cors:
+  allowed.origin: ${CORS_ALLOWED_ORIGIN}

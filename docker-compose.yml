@@ -23,6 +23,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       YANDEX_CLIENT_ID: ${YANDEX_CLIENT_ID}
       YANDEX_CLIENT_SECRET: ${YANDEX_CLIENT_SECRET}
+      CORS_ALLOWED_ORIGIN: ${CORS_ALLOWED_ORIGIN}
 
   nextjs:
     build: ./frontend/rateus-app
