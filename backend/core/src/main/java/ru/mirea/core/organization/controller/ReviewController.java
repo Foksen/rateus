@@ -14,7 +14,7 @@ import ru.mirea.core.organization.mapper.ReviewMapper;
 import ru.mirea.core.organization.service.ReviewService;
 
 @RestController
-@RequestMapping("/api/organizations/reviews")
+@RequestMapping("/api/reviews")
 public class ReviewController {
 
     @Autowired

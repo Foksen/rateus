@@ -79,7 +79,7 @@ public class AuthService {
         return createAuthenticationToken(email, password);
     }
 
-    String createAuthenticationToken(String email, String password) {
+    private String createAuthenticationToken(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );

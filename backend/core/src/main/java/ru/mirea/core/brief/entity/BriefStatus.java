@@ -1,4 +1,4 @@
-package ru.mirea.core.moderation.entity;
+package ru.mirea.core.brief.entity;
 
 public enum BriefStatus {
     NEW,

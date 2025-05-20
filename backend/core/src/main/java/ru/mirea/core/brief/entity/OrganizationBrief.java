@@ -1,7 +1,6 @@
-package ru.mirea.core.moderation.entity;
+package ru.mirea.core.brief.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -14,10 +13,8 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import ru.mirea.core.auth.entity.User;
 import ru.mirea.core.organization.entity.Organization;
 import ru.mirea.core.organization.entity.OrganizationType;
-import ru.mirea.core.organization.entity.Review;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
