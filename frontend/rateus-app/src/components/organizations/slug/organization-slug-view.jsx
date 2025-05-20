@@ -29,7 +29,7 @@ export function OrganizationSlugView({ session, organization }) {
         rounded="md"
       >
         {organization.websiteUrl ? (
-          <Link href={organization.webkitURL}>
+          <Link href={organization.websiteUrl}>
             <HStack>
               <Heading size="3xl" fontWeight="bold">
                 {organization.name}
