@@ -13,7 +13,7 @@ import ru.mirea.core.service.auth.UserService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired

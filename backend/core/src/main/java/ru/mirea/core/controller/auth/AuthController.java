@@ -12,7 +12,7 @@ import ru.mirea.core.dto.auth.TokenResponse;
 import ru.mirea.core.service.auth.AuthService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired

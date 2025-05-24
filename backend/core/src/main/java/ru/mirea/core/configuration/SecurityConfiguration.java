@@ -45,12 +45,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/error").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/organizations/types/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/organizations/types").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/organizations/types/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/organizations").hasAnyRole("OWNER", "MODERATOR", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/organizations/public/**").permitAll()
+                                .requestMatchers("/api/error").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/organizations/types/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/organizations/types").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/organizations/types/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/organizations").hasAnyRole("OWNER", "MODERATOR", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/organizations/public/**").permitAll()
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
