@@ -1,14 +1,14 @@
 package ru.mirea.core.controller.organization;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.mirea.core.dto.organization.OrganizationListWrapper;
-import ru.mirea.core.dto.organization.OrganizationWrapper;
-import ru.mirea.core.dto.organization.SaveOrganizationRequest;
+import ru.mirea.core.dto.organization.*;
 import ru.mirea.core.entity.organization.Organization;
 import ru.mirea.core.mapper.organization.OrganizationMapper;
+import ru.mirea.core.mapper.organization.OrganizationTypeMapper;
 import ru.mirea.core.service.organization.OrganizationService;
 
 import java.util.List;
@@ -23,6 +23,9 @@ public class OrganizationController {
 
     @Autowired
     private OrganizationMapper organizationMapper;
+
+    @Autowired
+    private OrganizationTypeMapper organizationTypeMapper;
 
     @PostMapping
     public OrganizationWrapper createOrganization(
@@ -99,5 +102,26 @@ public class OrganizationController {
     ) {
         Organization organization = organizationService.getPublicOrganization(id);
         return organizationMapper.map(organization);
+    }
+
+    @GetMapping("/types")
+    public OrganizationTypeListWrapper getOrganizationTypes() {
+        return organizationTypeMapper.map(organizationService.getOrganizationTypes());
+    }
+
+    @GetMapping("/types/available")
+    public OrganizationTypeListWrapper getAvailableOrganizationTypes() {
+        return organizationTypeMapper.map(organizationService.getAvailableOrganizationTypes());
+    }
+
+    @PostMapping("/types")
+    public OrganizationTypeWrapper createOrganizationType(@RequestBody OrganizationTypeWrapper organizationType) {
+        return organizationTypeMapper.map(organizationService.saveOrganizationType(organizationTypeMapper.map(organizationType)));
+    }
+
+    @DeleteMapping("/types/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOrganization(@PathVariable("id") int id) {
+        organizationService.deleteOrganizationType(id);
     }
 }
