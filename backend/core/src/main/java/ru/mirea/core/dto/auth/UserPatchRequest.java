@@ -3,7 +3,7 @@ package ru.mirea.core.dto.auth;
 import jakarta.annotation.Nullable;
 import ru.mirea.core.entity.auth.UserRole;
 
-public record UserPatchDataWrapper(
+public record UserPatchRequest(
         @Nullable String email,
         @Nullable String password,
         @Nullable UserRole userRole,

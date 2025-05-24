@@ -3,8 +3,7 @@ package ru.mirea.core.mapper.organization;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
-import ru.mirea.core.dto.organization.OrganizationListWrapper;
-import ru.mirea.core.dto.organization.OrganizationWrapper;
+import ru.mirea.core.dto.organization.OrganizationResponse;
 import ru.mirea.core.entity.organization.Organization;
 import ru.mirea.core.entity.organization.Review;
 
@@ -19,10 +18,10 @@ public interface OrganizationMapper {
     @Mapping(source = "organizationType.id", target = "organizationTypeId")
     @Mapping(source = "organizationType.name", target = "organizationType")
     @Mapping(target = "avgRating", expression = "java(calcAvgRating(organization.getReviews()))")
-    OrganizationWrapper map(Organization organization);
+    OrganizationResponse map(Organization organization);
 
-    default OrganizationListWrapper map(List<Organization> organizations) {
-        return new OrganizationListWrapper(organizations.stream().map(this::map).toList());
+    default List<OrganizationResponse> map(List<Organization> organizations) {
+        return organizations.stream().map(this::map).toList();
     }
 
     default Double calcAvgRating(List<Review> reviews) {

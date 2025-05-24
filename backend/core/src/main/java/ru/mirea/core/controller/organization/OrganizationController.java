@@ -28,9 +28,9 @@ public class OrganizationController {
     private OrganizationTypeMapper organizationTypeMapper;
 
     @PostMapping
-    public OrganizationWrapper createOrganization(
+    public OrganizationResponse createOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody SaveOrganizationRequest request
+            @RequestBody OrganizationSaveRequest request
     ) {
         Organization organization = organizationService.createOrganization(
                 userDetails,
@@ -44,10 +44,10 @@ public class OrganizationController {
     }
 
     @PutMapping("/{id}")
-    public OrganizationWrapper updateOrganization(
+    public OrganizationResponse updateOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("id") UUID id,
-            @RequestBody SaveOrganizationRequest request
+            @RequestBody OrganizationSaveRequest request
     ) {
         Organization organization = organizationService.updateOrganization(
                 userDetails,
@@ -63,7 +63,7 @@ public class OrganizationController {
 
     @GetMapping
     @RequestMapping("/self")
-    public OrganizationListWrapper getSelfOrganizations(
+    public List<OrganizationResponse> getSelfOrganizations(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         List<Organization> organizations = organizationService.getSelfOrganizations(userDetails);
@@ -72,7 +72,7 @@ public class OrganizationController {
 
     @GetMapping
     @RequestMapping("/self/{id}")
-    public OrganizationWrapper getSelfOrganization(
+    public OrganizationResponse getSelfOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("id") UUID id
     ) {
@@ -82,7 +82,7 @@ public class OrganizationController {
 
     @GetMapping
     @RequestMapping("/public")
-    public OrganizationListWrapper getPublicOrganizations(
+    public List<OrganizationResponse> getPublicOrganizations(
             @PathVariable(required = false) String name,
             @PathVariable(required = false) String ratingIn,
             @PathVariable(required = false) String organizationTypeIn
@@ -97,7 +97,7 @@ public class OrganizationController {
 
     @GetMapping
     @RequestMapping("/public/{id}")
-    public OrganizationWrapper getPublicOrganization(
+    public OrganizationResponse getPublicOrganization(
             @PathVariable(name = "id") UUID id
     ) {
         Organization organization = organizationService.getPublicOrganization(id);
@@ -105,17 +105,17 @@ public class OrganizationController {
     }
 
     @GetMapping("/types")
-    public OrganizationTypeListWrapper getOrganizationTypes() {
+    public List<OrganizationTypeResponse> getOrganizationTypes() {
         return organizationTypeMapper.map(organizationService.getOrganizationTypes());
     }
 
     @GetMapping("/types/available")
-    public OrganizationTypeListWrapper getAvailableOrganizationTypes() {
+    public List<OrganizationTypeResponse> getAvailableOrganizationTypes() {
         return organizationTypeMapper.map(organizationService.getAvailableOrganizationTypes());
     }
 
     @PostMapping("/types")
-    public OrganizationTypeWrapper createOrganizationType(@RequestBody OrganizationTypeWrapper organizationType) {
+    public OrganizationTypeResponse createOrganizationType(@RequestBody OrganizationTypeResponse organizationType) {
         return organizationTypeMapper.map(organizationService.saveOrganizationType(organizationTypeMapper.map(organizationType)));
     }
 

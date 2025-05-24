@@ -6,7 +6,7 @@ import ru.mirea.core.entity.auth.UserRole;
 import java.time.Instant;
 import java.util.UUID;
 
-public record UserWrapper(
+public record UserResponse(
         UUID id,
         String email,
         UserProvider userProvider,
