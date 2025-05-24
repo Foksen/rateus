@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mirea.core.dto.organization.ReviewWrapper;
-import ru.mirea.core.dto.organization.SaveReviewRequest;
+import ru.mirea.core.dto.organization.ReviewResponse;
+import ru.mirea.core.dto.organization.ReviewSaveRequest;
 import ru.mirea.core.entity.organization.Review;
 import ru.mirea.core.mapper.organization.ReviewMapper;
 import ru.mirea.core.service.organization.ReviewService;
@@ -24,9 +24,9 @@ public class ReviewController {
     private ReviewMapper reviewMapper;
 
     @PostMapping
-    public ReviewWrapper createReview(
+    public ReviewResponse createReview(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody SaveReviewRequest request
+            @RequestBody ReviewSaveRequest request
     ) {
         Review review = reviewService.createReview(userDetails, request.organizationId(), request.rating(), request.comment());
         return reviewMapper.map(review);

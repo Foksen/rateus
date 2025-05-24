@@ -3,8 +3,7 @@ package ru.mirea.core.mapper.organization;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
-import ru.mirea.core.dto.organization.ReviewListWrapper;
-import ru.mirea.core.dto.organization.ReviewWrapper;
+import ru.mirea.core.dto.organization.ReviewResponse;
 import ru.mirea.core.entity.organization.Review;
 
 import java.util.List;
@@ -14,9 +13,9 @@ public interface ReviewMapper {
 
     @Mapping(source = "author.id", target = "authorId")
     @Mapping(source = "organization.id", target = "organizationId")
-    ReviewWrapper map(Review review);
+    ReviewResponse map(Review review);
 
-    default ReviewListWrapper map(List<Review> reviews) {
-        return new ReviewListWrapper(reviews.stream().map(this::map).toList());
+    default List<ReviewResponse> map(List<Review> reviews) {
+        return reviews.stream().map(this::map).toList();
     }
 }

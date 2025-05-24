@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.mirea.core.dto.auth.UserPatchDataWrapper;
+import ru.mirea.core.dto.auth.UserPatchRequest;
 import ru.mirea.core.mapper.auth.UserMapper;
 import ru.mirea.core.model.UserPatchData;
 import ru.mirea.core.service.auth.UserService;
@@ -24,12 +24,12 @@ public class UserController {
 
     @PatchMapping
     @RequestMapping("/{id}")
-    public UserPatchDataWrapper patchUser(
+    public UserPatchRequest patchUser(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("id") UUID id,
-            @RequestBody UserPatchDataWrapper userPatchDataWrapper
+            @RequestBody UserPatchRequest userPatchRequest
     ) throws BadRequestException {
-        UserPatchData userPatchData = userMapper.map(userPatchDataWrapper);
+        UserPatchData userPatchData = userMapper.map(userPatchRequest);
         UserPatchData result = userService.patchUser(userDetails, id, userPatchData);
         return userMapper.map(result);
     }

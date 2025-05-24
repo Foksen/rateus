@@ -1,6 +1,6 @@
 package ru.mirea.core.dto.organization;
 
-public record OrganizationTypeWrapper(
+public record OrganizationTypeResponse(
         Integer id,
         String name,
         Boolean isAvailable

@@ -3,7 +3,7 @@ package ru.mirea.core.dto.organization;
 import java.time.Instant;
 import java.util.UUID;
 
-public record OrganizationWrapper (
+public record OrganizationResponse(
     UUID id,
     UUID ownerId,
     String name,
