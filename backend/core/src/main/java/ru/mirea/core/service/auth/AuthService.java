@@ -2,11 +2,14 @@ package ru.mirea.core.service.auth;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.mirea.core.client.YandexOAuthClient;
+import ru.mirea.core.client.YandexProfileClient;
 import ru.mirea.core.dto.auth.YandexProfileResponse;
 import ru.mirea.core.entity.auth.User;
 import ru.mirea.core.entity.auth.UserProvider;
@@ -17,22 +20,31 @@ import ru.mirea.core.exception.InvalidUserProviderException;
 @Slf4j
 public class AuthService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final YandexOAuthClient yandexOAuthClient;
+    private final YandexProfileClient yandexProfileClient;
+    private final String defaultYandexPassword;
 
-    @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private YandexOAuthService yandexOAuthService;
-
-    private final String DEFAULT_YANDEX_PASSWORD = "YANDEX-PASSWORD";
+    public AuthService(
+            AuthenticationManager authenticationManager,
+            JwtService jwtService,
+            PasswordEncoder passwordEncoder,
+            UserService userService,
+            YandexOAuthClient yandexOAuthClient,
+            YandexProfileClient yandexProfileClient,
+            @Value("${yandex.oauth.default-user-password}") String defaultYandexPassword
+    ) {
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+        this.yandexOAuthClient = yandexOAuthClient;
+        this.yandexProfileClient = yandexProfileClient;
+        this.defaultYandexPassword = defaultYandexPassword;
+    }
 
     public String authenticateWithEmail(String email, String password) {
         if (userService.findUserByEmail(email)
@@ -45,8 +57,8 @@ public class AuthService {
     }
 
     public String authenticateWithYandex(String code) {
-        String accessToken = yandexOAuthService.authorizeWithCode(code).accessToken();
-        YandexProfileResponse yandexProfile = yandexOAuthService.getYandexProfile(accessToken);
+        String accessToken = yandexOAuthClient.authorizeWithCode(code).accessToken();
+        YandexProfileResponse yandexProfile = yandexProfileClient.getProfile(accessToken);
 
         User yandexUser = userService.findUserByEmail(yandexProfile.defaultEmail()).orElse(null);
         if (yandexUser == null) {
@@ -54,13 +66,13 @@ public class AuthService {
                     yandexProfile.firstName(),
                     yandexProfile.lastName(),
                     yandexProfile.defaultEmail(),
-                    yandexOAuthService.getAvatarUrl(yandexProfile.defaultAvatarId())
+                    buildYandexAvatarUrl(yandexProfile.defaultAvatarId())
             );
         }
         if (yandexUser.getUserProvider() != UserProvider.YANDEX) {
             throw new InvalidUserProviderException("This email is already used with another provider");
         }
-        return createAuthenticationToken(yandexUser.getEmail(), DEFAULT_YANDEX_PASSWORD);
+        return createAuthenticationToken(yandexUser.getEmail(), defaultYandexPassword);
     }
 
     public String registerWithEmail(String name, String surname, String email, String password) {
@@ -86,7 +98,7 @@ public class AuthService {
     }
 
     private String registerWithYandex(String name, String surname, String email, String avatarUrl) {
-        String encodedPassword = passwordEncoder.encode(DEFAULT_YANDEX_PASSWORD);
+        String encodedPassword = passwordEncoder.encode(defaultYandexPassword);
         User user = User.builder()
                 .email(email)
                 .password(encodedPassword)
@@ -99,8 +111,12 @@ public class AuthService {
         userService.saveUser(user);
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, DEFAULT_YANDEX_PASSWORD)
+                new UsernamePasswordAuthenticationToken(email, defaultYandexPassword)
         );
         return jwtService.generateToken(authentication);
+    }
+
+    private String buildYandexAvatarUrl(String defaultAvatarId) {
+        return "https://avatars.yandex.net/get-yapic/" + defaultAvatarId + "/islands-retina-small";
     }
 }

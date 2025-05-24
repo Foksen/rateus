@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.mirea.core.dto.auth.UserPatchDataWrapper;
 import ru.mirea.core.mapper.auth.UserMapper;
-import ru.mirea.core.model.auth.UserPatchData;
+import ru.mirea.core.model.UserPatchData;
 import ru.mirea.core.service.auth.UserService;
 
 import java.util.UUID;

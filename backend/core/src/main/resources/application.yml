@@ -23,8 +23,12 @@ jwt:
 
 yandex:
   oauth:
-    client.id: ${YANDEX_CLIENT_ID}
-    client.secret: ${YANDEX_CLIENT_SECRET}
+    url: https://oauth.yandex.ru/token
+    client-id: ${YANDEX_CLIENT_ID}
+    client-secret: ${YANDEX_CLIENT_SECRET}
+    default-user-password: YANDEX-PASSWORD
+  profile:
+    url: https://login.yandex.ru/info?format=json
 
 logging:
   level:

@@ -1,4 +1,4 @@
-package ru.mirea.core.model.auth;
+package ru.mirea.core.model;
 
 import jakarta.annotation.Nullable;
 import ru.mirea.core.entity.auth.UserRole;

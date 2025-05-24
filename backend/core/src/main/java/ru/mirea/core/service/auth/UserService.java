@@ -12,7 +12,7 @@ import ru.mirea.core.entity.auth.UserProvider;
 import ru.mirea.core.entity.auth.UserRole;
 import ru.mirea.core.exception.UserAlreadyExistsException;
 import ru.mirea.core.exception.UserNotFoundException;
-import ru.mirea.core.model.auth.UserPatchData;
+import ru.mirea.core.model.UserPatchData;
 import ru.mirea.core.repository.auth.UserRepository;
 
 import java.util.Optional;
