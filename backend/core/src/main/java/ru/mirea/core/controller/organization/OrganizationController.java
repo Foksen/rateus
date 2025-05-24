@@ -1,19 +1,20 @@
 package ru.mirea.core.controller.organization;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.mirea.core.dto.organization.*;
 import ru.mirea.core.entity.organization.Organization;
 import ru.mirea.core.mapper.organization.OrganizationMapper;
-import ru.mirea.core.mapper.organization.OrganizationTypeMapper;
 import ru.mirea.core.service.organization.OrganizationService;
 
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Organizations", description = "Операции с организациями")
 @RestController
 @RequestMapping("/organizations")
 public class OrganizationController {
@@ -24,9 +25,7 @@ public class OrganizationController {
     @Autowired
     private OrganizationMapper organizationMapper;
 
-    @Autowired
-    private OrganizationTypeMapper organizationTypeMapper;
-
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     public OrganizationResponse createOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -43,6 +42,7 @@ public class OrganizationController {
         return organizationMapper.map(organization);
     }
 
+    @SecurityRequirement(name = "BearerAuth")
     @PutMapping("/{id}")
     public OrganizationResponse updateOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -61,8 +61,8 @@ public class OrganizationController {
         return organizationMapper.map(organization);
     }
 
-    @GetMapping
-    @RequestMapping("/self")
+    @SecurityRequirement(name = "BearerAuth")
+    @GetMapping("/self")
     public List<OrganizationResponse> getSelfOrganizations(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
@@ -70,8 +70,8 @@ public class OrganizationController {
         return organizationMapper.map(organizations);
     }
 
-    @GetMapping
-    @RequestMapping("/self/{id}")
+    @SecurityRequirement(name = "BearerAuth")
+    @GetMapping("/self/{id}")
     public OrganizationResponse getSelfOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("id") UUID id
@@ -80,12 +80,11 @@ public class OrganizationController {
         return organizationMapper.map(organization);
     }
 
-    @GetMapping
-    @RequestMapping("/public")
+    @GetMapping("/public")
     public List<OrganizationResponse> getPublicOrganizations(
-            @PathVariable(required = false) String name,
-            @PathVariable(required = false) String ratingIn,
-            @PathVariable(required = false) String organizationTypeIn
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String ratingIn,
+            @RequestParam(required = false) String organizationTypeIn
     ) {
         List<Organization> organizations = organizationService.getPublicOrganizations(
                 name,
@@ -95,33 +94,11 @@ public class OrganizationController {
         return organizationMapper.map(organizations);
     }
 
-    @GetMapping
-    @RequestMapping("/public/{id}")
+    @GetMapping("/public/{id}")
     public OrganizationResponse getPublicOrganization(
             @PathVariable(name = "id") UUID id
     ) {
         Organization organization = organizationService.getPublicOrganization(id);
         return organizationMapper.map(organization);
-    }
-
-    @GetMapping("/types")
-    public List<OrganizationTypeResponse> getOrganizationTypes() {
-        return organizationTypeMapper.map(organizationService.getOrganizationTypes());
-    }
-
-    @GetMapping("/types/available")
-    public List<OrganizationTypeResponse> getAvailableOrganizationTypes() {
-        return organizationTypeMapper.map(organizationService.getAvailableOrganizationTypes());
-    }
-
-    @PostMapping("/types")
-    public OrganizationTypeResponse createOrganizationType(@RequestBody OrganizationTypeResponse organizationType) {
-        return organizationTypeMapper.map(organizationService.saveOrganizationType(organizationTypeMapper.map(organizationType)));
-    }
-
-    @DeleteMapping("/types/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrganization(@PathVariable("id") int id) {
-        organizationService.deleteOrganizationType(id);
     }
 }

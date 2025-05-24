@@ -1,5 +1,6 @@
 package ru.mirea.core.controller.auth;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import ru.mirea.core.dto.auth.SignUpEmailRequest;
 import ru.mirea.core.dto.auth.TokenResponse;
 import ru.mirea.core.service.auth.AuthService;
 
+@Tag(name = "Auth", description = "Регистрация и авторизация")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

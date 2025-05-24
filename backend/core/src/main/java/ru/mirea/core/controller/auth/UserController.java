@@ -1,5 +1,7 @@
 package ru.mirea.core.controller.auth;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,6 +14,8 @@ import ru.mirea.core.service.auth.UserService;
 
 import java.util.UUID;
 
+@SecurityRequirement(name = "BearerAuth")
+@Tag(name = "Users", description = "Операции с пользователями")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -22,8 +26,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PatchMapping
-    @RequestMapping("/{id}")
+    @SecurityRequirement(name = "BearerAuth")
+    @PatchMapping("/{id}")
     public UserPatchRequest patchUser(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("id") UUID id,
