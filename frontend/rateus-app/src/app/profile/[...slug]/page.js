@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/nextauth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { ProfilePageContainer } from "@/components/profile/profile-page-container";
 import { ProfileSidebarContainer } from "@/components/profile/sidebar/profile-sidebar-container";
 import { Box } from "@chakra-ui/react";

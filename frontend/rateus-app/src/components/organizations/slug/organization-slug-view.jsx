@@ -75,7 +75,7 @@ export function OrganizationSlugView({ session, organization }) {
                 {organization.avgRating || "Нет отзывов"}
               </Heading>
               <Text mt="3px" ml="3" color="fg.subtle">
-                11 отзывов
+                1 отзыв
               </Text>
             </HStack>
           </Stack>
@@ -118,10 +118,6 @@ export function OrganizationSlugView({ session, organization }) {
           }}
           gap="5"
         >
-          <OrganizationSlugGridItemView />
-          <OrganizationSlugGridItemView />
-          <OrganizationSlugGridItemView />
-          <OrganizationSlugGridItemView />
           <OrganizationSlugGridItemView />
         </Grid>
       </Box>

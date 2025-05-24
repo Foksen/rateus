@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Card,
-  HStack,
-  Icon,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Avatar, Card, HStack, Icon, Stack, Text } from "@chakra-ui/react";
 import { TbStarFilled } from "react-icons/tb";
 
 export function OrganizationSlugGridItemView() {
@@ -15,11 +8,11 @@ export function OrganizationSlugGridItemView() {
         <HStack justify="space-between">
           <HStack gap="4">
             <Avatar.Root>
-              <Avatar.Fallback name="Matthew Jones" />
-              <Avatar.Image src="https://randomuser.me/api/portraits/men/70.jpg" />
+              <Avatar.Fallback name="Антон Смирнов" />
+              <Avatar.Image src="" />
             </Avatar.Root>
             <Stack gap="0">
-              <Text fontWeight="medium">Матье Бал</Text>
+              <Text fontWeight="medium">Антон Смирнов</Text>
             </Stack>
           </HStack>
 
@@ -34,9 +27,8 @@ export function OrganizationSlugGridItemView() {
         </HStack>
 
         <Text mt="3">
-          Восприятие, несмотря на внешние воздействия, стабильно. Рельеф, в
-          представлении Морено, выбирает филогенез. Действие аннигилирует
-          живописный кустарничек. Кукуруза входит ассоцианизм
+          Саров очень уютная гостиница! Особенно понравился завтрак и чистота в
+          номере, персонал помог с трансфером — рекомендую!
         </Text>
       </Card.Body>
     </Card.Root>

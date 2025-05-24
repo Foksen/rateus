@@ -9,7 +9,7 @@ export function OrganizationsView({ initialOrganizations }) {
   const [organizations, setOrganizations] = useState(initialOrganizations);
   return (
     <Flex pt="10" pb="20" gap="10" px="10" maxW="1660px" mx="auto">
-      {/* <OrganizationsFiltersView /> */}
+      <OrganizationsFiltersView />
       <OrganizationsGridView organizations={organizations} />
     </Flex>
   );
