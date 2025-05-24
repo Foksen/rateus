@@ -32,9 +32,9 @@ yandex:
   profile:
     url: https://login.yandex.ru/info?format=json
 
-logging:
-  level:
-    root: DEBUG
+#logging:
+#  level:
+#    root: DEBUG
 
 cors:
   allowed.origin: ${CORS_ALLOWED_ORIGIN}

@@ -1,5 +1,7 @@
 package ru.mirea.core.controller.organization;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import ru.mirea.core.entity.organization.Review;
 import ru.mirea.core.mapper.organization.ReviewMapper;
 import ru.mirea.core.service.organization.ReviewService;
 
+@Tag(name = "Reviews", description = "Операции с отзывами")
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
@@ -23,6 +26,7 @@ public class ReviewController {
     @Autowired
     private ReviewMapper reviewMapper;
 
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     public ReviewResponse createReview(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -31,5 +35,4 @@ public class ReviewController {
         Review review = reviewService.createReview(userDetails, request.organizationId(), request.rating(), request.comment());
         return reviewMapper.map(review);
     }
-
 }

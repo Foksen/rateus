@@ -45,7 +45,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/error").permitAll()
-                                .requestMatchers("/api/error").permitAll()
+                                .requestMatchers(
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui.html",
+                                        "/swagger-resources/**",
+                                        "/webjars/**")
+                                .permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/organizations/types/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/organizations/types").hasRole("ADMIN")
