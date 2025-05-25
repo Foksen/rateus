@@ -57,6 +57,9 @@ public class ReviewBrief {
     Integer rating;
 
     @NotNull
+    String comment;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
     BriefStatus status;

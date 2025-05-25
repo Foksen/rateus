@@ -2,12 +2,15 @@ package ru.mirea.core.controller.organization;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.mirea.core.dto.organization.*;
+import ru.mirea.core.dto.brief.OrganizationBriefResponse;
+import ru.mirea.core.dto.organization.OrganizationResponse;
+import ru.mirea.core.dto.organization.OrganizationSaveRequest;
+import ru.mirea.core.entity.brief.OrganizationBrief;
 import ru.mirea.core.entity.organization.Organization;
+import ru.mirea.core.mapper.brief.BriefMapper;
 import ru.mirea.core.mapper.organization.OrganizationMapper;
 import ru.mirea.core.service.organization.OrganizationService;
 
@@ -19,46 +22,54 @@ import java.util.UUID;
 @RequestMapping("/organizations")
 public class OrganizationController {
 
-    @Autowired
-    private OrganizationService organizationService;
+    private final OrganizationService organizationService;
+    private final OrganizationMapper organizationMapper;
+    private final BriefMapper briefMapper;
 
-    @Autowired
-    private OrganizationMapper organizationMapper;
-
-    @SecurityRequirement(name = "BearerAuth")
-    @PostMapping
-    public OrganizationResponse createOrganization(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody OrganizationSaveRequest request
+    public OrganizationController(
+            OrganizationService organizationService,
+            OrganizationMapper organizationMapper,
+            BriefMapper briefMapper
     ) {
-        Organization organization = organizationService.createOrganization(
-                userDetails,
-                request.name(),
-                request.organizationTypeId(),
-                request.description(),
-                request.websiteUrl(),
-                request.photoUrl()
-        );
-        return organizationMapper.map(organization);
+        this.organizationService = organizationService;
+        this.organizationMapper = organizationMapper;
+        this.briefMapper = briefMapper;
     }
 
     @SecurityRequirement(name = "BearerAuth")
-    @PutMapping("/{id}")
-    public OrganizationResponse updateOrganization(
+    @PostMapping
+    public OrganizationBriefResponse createOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable("id") UUID id,
             @RequestBody OrganizationSaveRequest request
     ) {
-        Organization organization = organizationService.updateOrganization(
+        OrganizationBrief organizationBrief = organizationService.createOrganization(
                 userDetails,
-                id,
                 request.name(),
                 request.organizationTypeId(),
                 request.description(),
                 request.websiteUrl(),
                 request.photoUrl()
         );
-        return organizationMapper.map(organization);
+        return briefMapper.mapOrganizationBrief(organizationBrief);
+    }
+
+    @SecurityRequirement(name = "BearerAuth")
+    @PutMapping("/{organizationId}")
+    public OrganizationBriefResponse updateOrganization(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("organizationId") UUID organizationId,
+            @RequestBody OrganizationSaveRequest request
+    ) {
+        OrganizationBrief organizationBrief = organizationService.updateOrganization(
+                userDetails,
+                organizationId,
+                request.name(),
+                request.organizationTypeId(),
+                request.description(),
+                request.websiteUrl(),
+                request.photoUrl()
+        );
+        return briefMapper.mapOrganizationBrief(organizationBrief);
     }
 
     @SecurityRequirement(name = "BearerAuth")
@@ -71,12 +82,12 @@ public class OrganizationController {
     }
 
     @SecurityRequirement(name = "BearerAuth")
-    @GetMapping("/self/{id}")
+    @GetMapping("/self/{organizationId}")
     public OrganizationResponse getSelfOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable("id") UUID id
+            @PathVariable("organizationId") UUID organizationId
     ) {
-        Organization organization = organizationService.getSelfOrganization(userDetails, id);
+        Organization organization = organizationService.getSelfOrganization(userDetails, organizationId);
         return organizationMapper.map(organization);
     }
 
@@ -94,11 +105,11 @@ public class OrganizationController {
         return organizationMapper.map(organizations);
     }
 
-    @GetMapping("/public/{id}")
+    @GetMapping("/public/{organizationId}")
     public OrganizationResponse getPublicOrganization(
-            @PathVariable(name = "id") UUID id
+            @PathVariable(name = "organizationId") UUID organizationId
     ) {
-        Organization organization = organizationService.getPublicOrganization(id);
+        Organization organization = organizationService.getPublicOrganization(organizationId);
         return organizationMapper.map(organization);
     }
 }

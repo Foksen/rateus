@@ -29,10 +29,11 @@ CREATE TABLE IF NOT EXISTS public.review_briefs
     author_id UUID NOT NULL REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE,
     organization_id UUID NOT NULL REFERENCES public.organizations(id) ON UPDATE CASCADE ON DELETE CASCADE,
     review_id UUID NOT NULL REFERENCES public.reviews(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    comment VARCHAR(2048) NOT NULL,
     status briefstatus NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_organization_briefs_owner_id ON public.organization_briefs(owner_id);
-CREATE INDEX idx_review_briefs_author_id ON public.review_briefs(author_id);
+CREATE INDEX IF NOT EXISTS idx_organization_briefs_owner_id ON public.organization_briefs(owner_id);
+CREATE INDEX IF NOT EXISTS idx_review_briefs_author_id ON public.review_briefs(author_id);

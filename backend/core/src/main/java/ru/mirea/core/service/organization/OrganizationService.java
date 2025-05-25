@@ -1,11 +1,12 @@
 package ru.mirea.core.service.organization;
 
 import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.mirea.core.entity.auth.User;
+import ru.mirea.core.entity.brief.OrganizationBrief;
 import ru.mirea.core.entity.organization.Organization;
 import ru.mirea.core.entity.organization.OrganizationType;
 import ru.mirea.core.entity.organization.Review;
@@ -13,6 +14,7 @@ import ru.mirea.core.exception.UserNotFoundException;
 import ru.mirea.core.repository.organization.OrganizationRepository;
 import ru.mirea.core.repository.organization.OrganizationTypeRepository;
 import ru.mirea.core.service.auth.UserService;
+import ru.mirea.core.service.brief.BriefService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,16 +23,25 @@ import java.util.stream.StreamSupport;
 @Service
 public class OrganizationService {
 
-    @Autowired
-    private OrganizationRepository organizationRepository;
+    private final OrganizationRepository organizationRepository;
+    private final OrganizationTypeRepository organizationTypeRepository;
+    private final UserService userService;
+    private final BriefService briefService;
 
-    @Autowired
-    private OrganizationTypeRepository organizationTypeRepository;
+    public OrganizationService(
+            OrganizationRepository organizationRepository,
+            OrganizationTypeRepository organizationTypeRepository,
+            UserService userService,
+            BriefService briefService
+    ) {
+        this.organizationRepository = organizationRepository;
+        this.organizationTypeRepository = organizationTypeRepository;
+        this.userService = userService;
+        this.briefService = briefService;
+    }
 
-    @Autowired
-    private UserService userService;
-
-    public Organization createOrganization(
+    @Transactional
+    public OrganizationBrief createOrganization(
             UserDetails userDetails,
             String name,
             Integer organizationTypeId,
@@ -51,12 +62,13 @@ public class OrganizationService {
                 .onceModerated(false)
                 .build();
 
-        // TODO: Brief logic
+        Organization savedOrganization = organizationRepository.save(organization);
 
-        return organizationRepository.save(organization);
+        return briefService.createOrganizationBrief(savedOrganization, true);
     }
 
-    public Organization updateOrganization(
+    @Transactional
+    public OrganizationBrief updateOrganization(
             UserDetails userDetails,
             UUID id,
             String name,
@@ -76,7 +88,7 @@ public class OrganizationService {
                     " has no access for organization " + id);
         }
 
-        Organization organization = Organization.builder()
+        Organization updatedOrganization = Organization.builder()
                 .id(id)
                 .owner(User.builder().id(owner.getId()).build())
                 .name(name)
@@ -84,13 +96,9 @@ public class OrganizationService {
                 .description(description)
                 .websiteUrl(websiteUrl)
                 .photoUrl(photoUrl)
-                .onceModerated(oldOrganization.getOnceModerated())
-                .createdAt(oldOrganization.getCreatedAt())
                 .build();
 
-        // TODO: Brief logic
-
-        return organizationRepository.save(organization);
+        return briefService.createOrganizationBrief(updatedOrganization, false);
     }
 
     public List<Organization> getSelfOrganizations(UserDetails userDetails) {
@@ -183,10 +191,12 @@ public class OrganizationService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public OrganizationType saveOrganizationType(OrganizationType organizationType) {
         return organizationTypeRepository.save(organizationType);
     }
 
+    @Transactional
     public void deleteOrganizationType(int id) {
         organizationTypeRepository.deleteById(id);
     }

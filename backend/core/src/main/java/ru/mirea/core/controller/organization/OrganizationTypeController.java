@@ -1,8 +1,6 @@
 package ru.mirea.core.controller.organization;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,26 +22,26 @@ public class OrganizationTypeController {
     @Autowired
     private OrganizationTypeMapper organizationTypeMapper;
 
-    @GetMapping("/types")
+    @GetMapping
     public List<OrganizationTypeResponse> getOrganizationTypes() {
         return organizationTypeMapper.map(organizationService.getOrganizationTypes());
     }
 
-    @GetMapping("/types/available")
+    @GetMapping("/available")
     public List<OrganizationTypeResponse> getAvailableOrganizationTypes() {
         return organizationTypeMapper.map(organizationService.getAvailableOrganizationTypes());
     }
 
     @SecurityRequirement(name = "BearerAuth")
-    @PostMapping("/types")
+    @PostMapping
     public OrganizationTypeResponse createOrganizationType(@RequestBody OrganizationTypeResponse organizationType) {
         return organizationTypeMapper.map(organizationService.saveOrganizationType(organizationTypeMapper.map(organizationType)));
     }
 
     @SecurityRequirement(name = "BearerAuth")
-    @DeleteMapping("/types/{id}")
+    @DeleteMapping("/{organizationTypeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrganization(@PathVariable("id") int id) {
-        organizationService.deleteOrganizationType(id);
+    public void deleteOrganization(@PathVariable("organizationTypeId") Integer organizationTypeId) {
+        organizationService.deleteOrganizationType(organizationTypeId);
     }
 }

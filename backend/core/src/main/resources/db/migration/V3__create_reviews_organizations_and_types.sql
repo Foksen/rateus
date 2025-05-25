@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS public.reviews
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_organizations_owner_id ON public.organizations(owner_id);
-CREATE INDEX idx_organizations_type_id ON public.organizations(organization_type_id);
-CREATE INDEX idx_reviews_author_id ON public.reviews(author_id);
-CREATE INDEX idx_reviews_organization_id ON public.reviews(organization_id);
+CREATE INDEX IF NOT EXISTS idx_organizations_owner_id ON public.organizations(owner_id);
+CREATE INDEX IF NOT EXISTS idx_organizations_type_id ON public.organizations(organization_type_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_author_id ON public.reviews(author_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_organization_id ON public.reviews(organization_id);
