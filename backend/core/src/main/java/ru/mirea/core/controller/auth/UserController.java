@@ -27,14 +27,14 @@ public class UserController {
     private UserService userService;
 
     @SecurityRequirement(name = "BearerAuth")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{userId}")
     public UserPatchRequest patchUser(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable("id") UUID id,
+            @PathVariable("userId") UUID userId,
             @RequestBody UserPatchRequest userPatchRequest
     ) throws BadRequestException {
         UserPatchData userPatchData = userMapper.map(userPatchRequest);
-        UserPatchData result = userService.patchUser(userDetails, id, userPatchData);
+        UserPatchData result = userService.patchUser(userDetails, userId, userPatchData);
         return userMapper.map(result);
     }
 }

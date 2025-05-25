@@ -32,6 +32,11 @@ yandex:
   profile:
     url: https://login.yandex.ru/info?format=json
 
+springdoc:
+  swagger-ui:
+    operationsSorter: alpha
+    tagsSorter: alpha
+
 #logging:
 #  level:
 #    root: DEBUG

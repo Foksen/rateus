@@ -7,6 +7,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.mirea.core.entity.auth.User;
 import ru.mirea.core.entity.auth.UserProvider;
 import ru.mirea.core.entity.auth.UserRole;
@@ -38,6 +39,7 @@ public class UserService {
         return userRepository.findByEmailAndUserProvider(email, UserProvider.YANDEX);
     }
 
+    @Transactional
     public User saveUser(User user) {
         Optional<User> sameEmailUser = findUserByEmail(user.getEmail());
         if (sameEmailUser.isPresent()) {
@@ -46,6 +48,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public UserPatchData patchUser(UserDetails userDetails, UUID id, UserPatchData userPatchData)
             throws BadRequestException
     {

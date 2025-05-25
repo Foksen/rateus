@@ -50,14 +50,14 @@ public class SecurityConfiguration {
                                         "/v3/api-docs/**",
                                         "/swagger-ui.html",
                                         "/swagger-resources/**",
-                                        "/webjars/**")
-                                .permitAll()
+                                        "/webjars/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/organizations/types/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/organizations/types").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/organizations/types/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/organizations").hasAnyRole("OWNER", "MODERATOR", "ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/organizations/public/**").permitAll()
+                                .requestMatchers(HttpMethod.PATCH, "/briefs/**").hasAnyRole("MODERATOR", "ADMIN")
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
