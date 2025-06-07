@@ -14,7 +14,7 @@ import ru.mirea.core.service.auth.AuthService;
 
 @Tag(name = "Auth", description = "Регистрация и авторизация")
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/back-auth")
 public class AuthController {
 
     @Autowired

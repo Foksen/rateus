@@ -10,6 +10,7 @@ import {
   Portal,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import { REQUEST_TYPE } from "@/constants/request-type";
 // import { useRouter } from "next/navigation";
 
 function mapUsernameError(error) {
@@ -42,9 +43,14 @@ export function SettingsActionChangeUsername({ session, setUsername }) {
     const username = data.username;
 
     try {
-      await patchUser(session.accessToken, session.user.id, {
-        username,
-      });
+      await patchUser(
+        session.accessToken,
+        session.user.id,
+        {
+          username,
+        },
+        REQUEST_TYPE.CLIENT
+      );
       // TODO: Рефактор аутентификации, сделать получение user из БД, можно будет убрать из JWT всё кроме ID
       // router.refresh();
       setUsername(username);
@@ -98,7 +104,11 @@ export function SettingsActionChangeUsername({ session, setUsername }) {
                   Отменить
                 </Button>
               </Dialog.ActionTrigger>
-              <Button type="submit" colorPalette={ACCENT_COLOR} disabled={!isValid}>
+              <Button
+                type="submit"
+                colorPalette={ACCENT_COLOR}
+                disabled={!isValid}
+              >
                 Сменить имя
               </Button>
             </Dialog.Footer>

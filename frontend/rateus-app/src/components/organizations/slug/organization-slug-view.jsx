@@ -72,7 +72,8 @@ export function OrganizationSlugView({ session, organization }) {
                 <TbStarFilled />
               </Icon>
               <Heading ml="1" size="2xl">
-                {organization.avgRating || "Нет отзывов"}
+                {Math.trunc(organization.avgRating * 100) / 100 ||
+                  "Нет отзывов"}
               </Heading>
               <Text mt="3px" ml="3" color="fg.subtle">
                 1 отзыв

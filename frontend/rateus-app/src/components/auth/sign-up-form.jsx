@@ -14,15 +14,13 @@ import { PasswordInput } from "../ui/password-input";
 import { ACCENT_COLOR } from "@/constants/ui";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { registerUserWithEmail } from "@/lib/api/auth";
+import { registerUserWithEmail } from "@/lib/api/back-auth";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { mapSignUpErrors } from "@/lib/utils/map-errors";
-import { useRouter } from "next/navigation";
+import { REQUEST_TYPE } from "@/constants/request-type";
 
 export function SignUpForm({}) {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -43,19 +41,22 @@ export function SignUpForm({}) {
     }
 
     try {
-      const response = await registerUserWithEmail({
-        name: data.name,
-        surname: data.surname,
-        email: data.email,
-        password: data.password,
-      });
+      const response = await registerUserWithEmail(
+        {
+          name: data.name,
+          surname: data.surname,
+          email: data.email,
+          password: data.password,
+        },
+        REQUEST_TYPE.CLIENT
+      );
       const token = response.token;
       if (token) {
         await signIn("credentials", {
           token: response.token,
           redirect: false,
         });
-        router.push("/");
+        window.location.href = "/";
       } else {
         throw Error("No token in sign-up response");
       }

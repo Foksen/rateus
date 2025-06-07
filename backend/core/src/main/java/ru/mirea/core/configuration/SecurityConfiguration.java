@@ -23,9 +23,6 @@ public class SecurityConfiguration {
     @Autowired
     private AuthTokenFilter authTokenFilter;
 
-    @Value("${cors.allowed.origin}")
-    private String corsAllowedOrigin;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -33,7 +30,6 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
                     configuration.addAllowedOrigin("http://localhost:3000");
-                    configuration.addAllowedOrigin(corsAllowedOrigin);
                     configuration.addAllowedMethod("*");
                     configuration.addAllowedHeader("*");
                     configuration.setAllowCredentials(true);
@@ -51,7 +47,7 @@ public class SecurityConfiguration {
                                         "/swagger-ui.html",
                                         "/swagger-resources/**",
                                         "/webjars/**").permitAll()
-                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/back-auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/organizations/types/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/organizations/types").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/organizations/types/**").hasRole("ADMIN")

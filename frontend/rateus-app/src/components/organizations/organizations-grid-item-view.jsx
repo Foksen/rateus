@@ -1,3 +1,4 @@
+import { isValidImageUrl } from "@/lib/utils/is-valid-url";
 import { Card, Center, Icon, Image, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { TbStarFilled } from "react-icons/tb";
@@ -12,7 +13,10 @@ export function OrganizationsGridItemView({ organization }) {
         transition="backgrounds"
       >
         <Image
-          src={organization.photoUrl}
+          src={
+            (isValidImageUrl(organization.photoUrl) && organization.photoUrl) ||
+            null
+          }
           alt="Фото огранизации"
           aspectRatio={16 / 9}
         />
@@ -40,7 +44,7 @@ export function OrganizationsGridItemView({ organization }) {
               <TbStarFilled />
             </Icon>
             <Text fontWeight="medium">
-              {organization.avgRating || "Нет отзывов"}
+              {Math.trunc(organization.avgRating * 100) / 100 || "Нет отзывов"}
             </Text>
           </Center>
         </Card.Body>

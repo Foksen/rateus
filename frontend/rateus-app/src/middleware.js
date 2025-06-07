@@ -14,6 +14,12 @@ export async function middleware(req) {
 
   const isAuth = !!user;
 
+  // Direct to organizations page
+
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/organizations", req.url));
+  }
+
   // If is already authenticated
   const isAuthPath = pathname.startsWith("/auth");
 
@@ -37,11 +43,11 @@ export async function middleware(req) {
     const userAvailablePages = PROFILE_PAGE_AUTHORITIES[userRole];
 
     if (
-      !userAvailablePages.includes(profilePage) &&
+      !userAvailablePages?.includes(profilePage) &&
       !Object.values(PROFILE_COMMON_PAGE).includes(profilePage)
     ) {
       return NextResponse.redirect(
-        new URL(`/profile/${userAvailablePages[0]}`, req.url)
+        new URL(`/profile/${userAvailablePages?.[0]}`, req.url)
       );
     }
   }
@@ -50,5 +56,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/auth/:path*"],
+  matcher: ["/:path*", "/", "/profile/:path*", "/auth/:path*"],
 };

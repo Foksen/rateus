@@ -1,9 +1,29 @@
+import { REQUEST_TYPE } from "@/constants/request-type";
+
 export async function backendFetch(
   url,
-  { method = "GET", data = null, accessToken = null, params = null } = {}
+  { method = "GET", data = null, accessToken = null, params = null } = {},
+  requestType
 ) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_RATEUS_BACKEND_URL || "http://localhost:8080";
+  console.log("Container backend url:", process.env.NEXT_BACKEND_CONTAINER_URL);
+  console.log("Public url:", process.env.NEXT_PUBLIC_BACKEND_URL);
+
+  console.log("Request type:", requestType);
+
+  let baseUrl;
+  switch (requestType) {
+    case REQUEST_TYPE.SSR: {
+      baseUrl = process.env.NEXT_BACKEND_CONTAINER_URL;
+      break;
+    }
+    case REQUEST_TYPE.CLIENT: {
+      baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+      break;
+    }
+    default: {
+      baseUrl = "http://localhost:8080";
+    }
+  }
 
   const headers = {
     "Content-Type": "application/json",
@@ -14,6 +34,8 @@ export async function backendFetch(
   }
 
   let fullUrl = new URL(baseUrl + url);
+
+  console.log("Full url:", fullUrl);
 
   if (params && typeof params === "object") {
     Object.entries(params).forEach(([key, value]) => {

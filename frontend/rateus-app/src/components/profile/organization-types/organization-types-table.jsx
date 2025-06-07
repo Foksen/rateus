@@ -101,7 +101,7 @@ export function OrganizationTypesTable({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {organizationTypes.map((organizationType, index) => (
+          {organizationTypes?.map((organizationType, index) => (
             <Table.Row key={index} h="16">
               <Table.Cell
                 borderTopWidth="1px"
