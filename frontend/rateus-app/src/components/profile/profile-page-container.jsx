@@ -50,10 +50,10 @@ export async function ProfilePageContainer({ profilePage, session }) {
 
     return (
       <OrganizationsSelfContainer
-        organizations={
-          (await getSelfOrganizations(session.token, REQUEST_TYPE.SSR))
-            .organizations
-        }
+        organizations={await getSelfOrganizations(
+          session.token,
+          REQUEST_TYPE.SSR
+        )}
       />
     );
   }

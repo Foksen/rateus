@@ -1,5 +1,6 @@
 import { isValidImageUrl } from "@/lib/utils/is-valid-url";
-import { Card, Center, Icon, Image, Text } from "@chakra-ui/react";
+import { pickPalette, pickRatingPalette } from "@/lib/utils/pick-palette";
+import { Badge, Card, Center, Icon, Image, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { TbStarFilled } from "react-icons/tb";
 
@@ -20,33 +21,39 @@ export function OrganizationsGridItemView({ organization }) {
           alt="Фото огранизации"
           aspectRatio={16 / 9}
         />
+
+        <Badge
+          position="absolute"
+          top="10px"
+          left="10px"
+          size="lg"
+          colorPalette={pickPalette(organization.organizationType)}
+          variant="surface"
+          rounded="full"
+        >
+          {organization.organizationType}
+        </Badge>
+
+        {typeof organization.avgRating == "number" && (
+          <Badge
+            position="absolute"
+            top="10px"
+            right="10px"
+            size="lg"
+            colorPalette={pickRatingPalette(organization.avgRating)}
+            variant="solid"
+            rounded="full"
+          >
+            {Math.trunc(organization.avgRating * 100) / 100 || "Нет отзывов"}
+          </Badge>
+        )}
+
         <Card.Body gap="6px" p="5">
           <Card.Title>{organization.name}</Card.Title>
 
           <Card.Description h="16" lineClamp="3">
             {organization.description}
           </Card.Description>
-
-          <Center
-            px="2"
-            py="1"
-            position="absolute"
-            top="2"
-            right="3"
-            gap="6px"
-            bg="white"
-            borderWidth="1px"
-            borderColor="border.muted"
-            rounded="md"
-            shadow="sm"
-          >
-            <Icon color="yellow.400">
-              <TbStarFilled />
-            </Icon>
-            <Text fontWeight="medium">
-              {Math.trunc(organization.avgRating * 100) / 100 || "Нет отзывов"}
-            </Text>
-          </Center>
         </Card.Body>
       </Card.Root>
     </Link>
