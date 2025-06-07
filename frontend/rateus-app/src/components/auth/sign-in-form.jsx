@@ -13,19 +13,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { PasswordInput } from "../ui/password-input";
-import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { yandexOAuthRedirect } from "@/lib/api/yandex";
 import { mapSignInErrors } from "@/lib/utils/map-errors";
 
 export function SignInForm({}) {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -46,7 +42,7 @@ export function SignInForm({}) {
 
     const response = await signIn("credentials", { ...params });
     if (response.ok) {
-      router.push("/");
+      window.location.href = "/";
     } else {
       setIsLoading(false);
       const errorData = JSON.parse(decodeURIComponent(response.error)).data;
@@ -122,11 +118,6 @@ export function SignInForm({}) {
       <Separator my="4" w="full" />
 
       <ButtonGroup w="full" grow>
-        {/* <Button variant="subtle" onClick={null}>
-          <FcGoogle />
-          Войти через Google
-        </Button> */}
-
         <Button variant="subtle" onClick={yandexOAuthRedirect}>
           <Image
             alt="yandex"

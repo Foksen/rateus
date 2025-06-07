@@ -1,8 +1,6 @@
 export function yandexOAuthRedirect() {
   const YANDEX_CLIENT_ID = process.env.NEXT_PUBLIC_YANDEX_CLIENT_ID;
-  const REDIRECT_URI = `${
-    process.env.NEXT_PUBLIC_RATEUS_URL || "http://localhost:3000"
-  }/oauth/callback/yandex`;
+  const REDIRECT_URI = `${process.env.NEXT_PUBLIC_RATEUS_URL}/oauth/callback/yandex`;
 
   const params = new URLSearchParams({
     response_type: "code",

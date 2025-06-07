@@ -13,55 +13,7 @@ import {
 } from "@/lib/api/organizations";
 import { OrganizationsSelfContainer } from "./organizations-self/organizations-self-container";
 import { OrganizationSaveContainer } from "./organization-save/organization-save-containter";
-
-const fetchTasks = async (session) => {
-  try {
-    const result = await getTasks(session.accessToken);
-    return result.results;
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-  }
-};
-
-const fetchMasterTasks = async (session) => {
-  try {
-    const masterId = session?.user?.id;
-    if (!masterId) {
-      throw new Error("Cannot get master id from session");
-    }
-    const result = await getTasks(session.accessToken, { master: masterId });
-    return result.results;
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-  }
-};
-
-const fetchCategories = async (filters) => {
-  try {
-    const result = await getCategories(filters);
-    return result.results;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-  }
-};
-
-const fetchServiceCenters = async (filters) => {
-  try {
-    const result = await getServiceCenters(filters);
-    return result.results;
-  } catch (error) {
-    console.error("Error fetching service centers:", error);
-  }
-};
-
-// const fetchOrganizationTypes = async (session) => {
-//   try {
-//     const result = await getCategoriesInfos(session.accessToken);
-//     return result.results;
-//   } catch (error) {
-//     console.error("Error fetching categories infos: ", error);
-//   }
-// };
+import { REQUEST_TYPE } from "@/constants/request-type";
 
 export async function ProfilePageContainer({ profilePage, session }) {
   if (!Array.isArray(profilePage)) {
@@ -75,19 +27,23 @@ export async function ProfilePageContainer({ profilePage, session }) {
         return (
           <OrganizationSaveContainer
             session={session}
-            initialOrganizationTypes={
-              (await getAvailableOrganizationTypes()).organizationTypes
-            }
+            initialOrganizationTypes={await getAvailableOrganizationTypes(
+              REQUEST_TYPE.SSR
+            )}
           />
         );
       }
       return (
         <OrganizationSaveContainer
           session={session}
-          initialOrganizationTypes={
-            (await getAvailableOrganizationTypes()).organizationTypes
-          }
-          initialOrganization={await getSelfOrganization(session.token, id)}
+          initialOrganizationTypes={await getAvailableOrganizationTypes(
+            REQUEST_TYPE.SSR
+          )}
+          initialOrganization={await getSelfOrganization(
+            session.token,
+            id,
+            REQUEST_TYPE.SSR
+          )}
         />
       );
     }
@@ -95,7 +51,8 @@ export async function ProfilePageContainer({ profilePage, session }) {
     return (
       <OrganizationsSelfContainer
         organizations={
-          (await getSelfOrganizations(session.token)).organizations
+          (await getSelfOrganizations(session.token, REQUEST_TYPE.SSR))
+            .organizations
         }
       />
     );
@@ -105,9 +62,7 @@ export async function ProfilePageContainer({ profilePage, session }) {
     return (
       <OrganizationTypesContainer
         session={session}
-        initialOrganizationTypes={
-          (await getOrganizationTypes()).organizationTypes
-        }
+        initialOrganizationTypes={await getOrganizationTypes(REQUEST_TYPE.SSR)}
       />
     );
   }

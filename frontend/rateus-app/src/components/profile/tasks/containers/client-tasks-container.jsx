@@ -10,7 +10,6 @@ import {
 } from "./../filters/task-filters";
 import { mapFilters } from "@/lib/utils/map-filters";
 import debounce from "debounce";
-import { DEBOUNCE_WAIT_MS } from "@/constants/api";
 import { TasksContent } from "../tasks-content";
 import { ProfilePageView } from "../../profile-page-view";
 

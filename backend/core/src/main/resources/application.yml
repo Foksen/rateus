@@ -40,6 +40,3 @@ springdoc:
 #logging:
 #  level:
 #    root: DEBUG
-
-cors:
-  allowed.origin: ${CORS_ALLOWED_ORIGIN}
