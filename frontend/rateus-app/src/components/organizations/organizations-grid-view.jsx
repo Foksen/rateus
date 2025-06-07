@@ -35,7 +35,7 @@ export function OrganizationsGridView({ organizations }) {
         }}
         gap="5"
       >
-        {organizations.map((organization, index) => (
+        {organizations?.map((organization, index) => (
           <OrganizationsGridItemView key={index} organization={organization} />
         ))}
       </Grid>

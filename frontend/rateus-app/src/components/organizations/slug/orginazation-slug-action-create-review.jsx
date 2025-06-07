@@ -1,7 +1,8 @@
 "use client";
 
+import { REQUEST_TYPE } from "@/constants/request-type";
 import { ACCENT_COLOR } from "@/constants/ui";
-import { createReview } from "@/lib/api/tasks";
+import { createReview } from "@/lib/api/reviews";
 import {
   Box,
   Button,
@@ -98,7 +99,7 @@ export function OrganizationSlugActionCreateReview({
   } = useForm({ defaultValues: { organizationId: organizationId } });
 
   const onSubmit = handleSubmit(async (data) => {
-    await createReview(session.token, data);
+    await createReview(session.token, data, REQUEST_TYPE.CLIENT);
     setIsOpen(false);
     reset();
     setIsSucess(true);

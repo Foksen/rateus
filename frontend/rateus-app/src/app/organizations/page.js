@@ -1,7 +1,7 @@
 import { OrganizationsContainer } from "@/components/organizations/organizations-container";
 import { getServerSession } from "next-auth";
 import { Fragment } from "react";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 import { Header } from "@/components/common/header/header";
 
 export default async function OrganizationsPage() {

@@ -30,6 +30,7 @@ services:
     container_name: nextjs
     environment:
       NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXT_BACKEND_CONTAINER_URL: ${NEXT_BACKEND_CONTAINER_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
 
   nginx:

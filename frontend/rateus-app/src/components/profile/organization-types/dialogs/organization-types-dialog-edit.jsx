@@ -13,6 +13,7 @@ import { useEffect, useRef } from "react";
 import { mapOrganizationTypeError } from "@/lib/utils/map-errors";
 import { ACCENT_COLOR } from "@/constants/ui";
 import { createOrganizationType } from "@/lib/api/organizations";
+import { REQUEST_TYPE } from "@/constants/request-type";
 
 export function OrganizationTypesDialogEdit({
   isEditDialogOpen,
@@ -53,11 +54,15 @@ export function OrganizationTypesDialogEdit({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const response = await createOrganizationType(session.token, {
-        id: organizationType.id,
-        name: data.name,
-        isAvailable: data.isAvailable,
-      });
+      const response = await createOrganizationType(
+        session.token,
+        {
+          id: organizationType.id,
+          name: data.name,
+          isAvailable: data.isAvailable,
+        },
+        REQUEST_TYPE.CLIENT
+      );
       updateOrganizationType(response.id, response);
       setEditDialogOpen(false);
       reset();

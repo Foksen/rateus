@@ -1,6 +1,7 @@
 "use client";
 
-import { loginWithYandex } from "@/lib/api/auth";
+import { REQUEST_TYPE } from "@/constants/request-type";
+import { loginWithYandex } from "@/lib/api/back-auth";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, Suspense } from "react";
@@ -19,7 +20,7 @@ function YandexCallbackInner() {
 
     async function sendCode() {
       try {
-        const response = await loginWithYandex(code);
+        const response = await loginWithYandex(code, REQUEST_TYPE.CLIENT);
         await signIn("credentials", {
           token: response.token,
           redirect: false,

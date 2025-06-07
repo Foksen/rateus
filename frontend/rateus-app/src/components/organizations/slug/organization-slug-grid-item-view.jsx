@@ -9,7 +9,6 @@ export function OrganizationSlugGridItemView() {
           <HStack gap="4">
             <Avatar.Root>
               <Avatar.Fallback name="Антон Смирнов" />
-              <Avatar.Image src="" />
             </Avatar.Root>
             <Stack gap="0">
               <Text fontWeight="medium">Антон Смирнов</Text>

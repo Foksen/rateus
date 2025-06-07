@@ -1,12 +1,11 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, Suspense } from "react";
 
 function LogoutCallbackInner() {
   const { status } = useSession();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
 
@@ -14,9 +13,9 @@ function LogoutCallbackInner() {
     if (status === "authenticated") {
       signOut({ redirect: false });
     } else if (status === "unauthenticated") {
-      router.replace(redirectTo);
+      window.location.href = redirectTo;
     }
-  }, [status, router]);
+  }, [status, redirectTo]);
 }
 
 export default function LogoutCallback() {

@@ -12,7 +12,7 @@ export function OrganizationsSelfGrid({ organizations }) {
       }}
       gap="5"
     >
-      {organizations.map((organization, index) => (
+      {organizations?.map((organization, index) => (
         <OrganizationsSelfGridItem organization={organization} key={index} />
       ))}
     </Grid>

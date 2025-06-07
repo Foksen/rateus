@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                                         "/swagger-ui.html",
                                         "/swagger-resources/**",
                                         "/webjars/**").permitAll()
-                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/back-auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/organizations/types/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/organizations/types").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/organizations/types/**").hasRole("ADMIN")

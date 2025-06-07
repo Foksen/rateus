@@ -1,6 +1,7 @@
 "use client";
 
 import { PROFILE_PAGE } from "@/constants/profile-pages";
+import { REQUEST_TYPE } from "@/constants/request-type";
 import { ACCENT_COLOR } from "@/constants/ui";
 import {
   createOrganization,
@@ -60,19 +61,25 @@ export function OrganizationSaveView({
         ? await updateOrganization(
             session.token,
             initialOrganization.id,
-            requestBody
+            requestBody,
+            REQUEST_TYPE.CLIENT
           )
-        : await createOrganization(session.token, requestBody);
+        : await createOrganization(
+            session.token,
+            requestBody,
+            REQUEST_TYPE.CLIENT
+          );
     }
 
     router.push(`/profile/${PROFILE_PAGE.ORGANIZATION_BRIEFS_SELF}`);
   });
 
   const organizationTypes = createListCollection({
-    items: initialOrganizationTypes.map((item) => ({
-      value: item.id,
-      label: item.name,
-    })),
+    items:
+      initialOrganizationTypes?.map((item) => ({
+        value: item.id,
+        label: item.name,
+      })) ?? [],
   });
 
   return (

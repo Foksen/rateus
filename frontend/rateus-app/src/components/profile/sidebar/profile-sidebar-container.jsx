@@ -4,12 +4,18 @@ import { ProfileSidebarView } from "./profile-sidebar-view";
 import { BecomeOwnerAction } from "./profile-sidebar-become-owner-action";
 import { patchUser } from "@/lib/api/user";
 import { useRouter } from "next/navigation";
+import { REQUEST_TYPE } from "@/constants/request-type";
 
 const patchUserRoleOwner = async (accessToken, userId) => {
   try {
-    const result = await patchUser(accessToken, userId, {
-      userRole: "OWNER",
-    });
+    const result = await patchUser(
+      accessToken,
+      userId,
+      {
+        userRole: "OWNER",
+      },
+      REQUEST_TYPE.CLIENT
+    );
   } catch (error) {
     console.error("Failed to make client owner");
   }

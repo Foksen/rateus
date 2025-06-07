@@ -13,6 +13,7 @@ import { useState, useRef } from "react";
 import { mapOrganizationTypeError } from "@/lib/utils/map-errors";
 import { ACCENT_COLOR } from "@/constants/ui";
 import { createOrganizationType } from "@/lib/api/organizations";
+import { REQUEST_TYPE } from "@/constants/request-type";
 
 export function OrganizationTypesActionCreate({
   session,
@@ -36,7 +37,7 @@ export function OrganizationTypesActionCreate({
       const response = await createOrganizationType(session.token, {
         name: data.name,
         isAvailable: data.isAvailable,
-      });
+      }, REQUEST_TYPE.CLIENT);
       addOrganizationType({
         id: response.id,
         name: response.name,
