@@ -42,7 +42,7 @@ export function OrganizationSaveView({
           description: initialOrganization.description,
           organizationTypeId: [initialOrganization.organizationTypeId],
           photoUrl: initialOrganization.photoUrl,
-          webkitURL: initialOrganization.webkitURL,
+          websiteUrl: initialOrganization.websiteUrl,
         }
       : {},
   });

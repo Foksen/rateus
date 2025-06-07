@@ -7,7 +7,6 @@ export async function backendFetch(
 ) {
   console.log("Container backend url:", process.env.NEXT_BACKEND_CONTAINER_URL);
   console.log("Public url:", process.env.NEXT_PUBLIC_BACKEND_URL);
-
   console.log("Request type:", requestType);
 
   let baseUrl;
@@ -35,7 +34,7 @@ export async function backendFetch(
 
   let fullUrl = new URL(baseUrl + url);
 
-  console.log("Full url:", fullUrl);
+  console.log("Full url:", fullUrl.toString());
 
   if (params && typeof params === "object") {
     Object.entries(params).forEach(([key, value]) => {

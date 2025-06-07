@@ -1,33 +1,36 @@
+import { Tooltip } from "@/components/ui/tooltip";
 import { PROFILE_PAGE } from "@/constants/profile-pages";
+import { pickPalette, pickRatingPalette } from "@/lib/utils/pick-palette";
 import {
+  Badge,
   Card,
-  Center,
+  HStack,
   Icon,
   IconButton,
   Image,
   Menu,
   Portal,
-  Stack,
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { TbDots, TbStarFilled } from "react-icons/tb";
+import {
+  TbPencilCog,
+  TbZoomCancelFilled,
+  TbZoomCheckFilled,
+} from "react-icons/tb";
 
-function GridItemMenu({ id, ...props }) {
+function GridItemMenu({ id }) {
   return (
     <Menu.Root>
       <Menu.Trigger asChild>
-        <IconButton
-          variant="ghost"
-          bg="bg"
-          _hover={{ bg: "bg.muted" }}
-          size="sm"
-          borderWidth="1px"
-          borderColor="border.muted"
-          {...props}
+        <Icon
+          color="fg.subtle"
+          cursor="pointer"
+          _hover={{ color: "gray.fg" }}
+          transition="colors"
         >
-          <TbDots />
-        </IconButton>
+          <TbPencilCog />
+        </Icon>
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
@@ -57,72 +60,73 @@ export function OrganizationsSelfGridItem({ organization }) {
         alt="Organization photo"
         aspectRatio={16 / 9}
       />
-      <Card.Body gap="6px" p="5">
-        <Card.Title>{organization.name}</Card.Title>
 
+      <Badge
+        position="absolute"
+        top="10px"
+        left="10px"
+        size="lg"
+        colorPalette={pickPalette(organization.organizationType)}
+        variant="surface"
+        rounded="full"
+      >
+        {organization.organizationType}
+      </Badge>
+
+      {typeof organization.avgRating == "number" && (
+        <Badge
+          position="absolute"
+          top="10px"
+          right="10px"
+          size="lg"
+          colorPalette={pickRatingPalette(organization.avgRating)}
+          variant="solid"
+          rounded="full"
+        >
+          {Math.trunc(organization.avgRating * 100) / 100 || "Нет отзывов"}
+        </Badge>
+      )}
+
+      <Card.Body gap="6px" p="5">
+        <Card.Title>
+          <HStack justify="space-between">
+            <HStack gap="3">
+              <Text h="fit">{organization.name}</Text>
+              <GridItemMenu id={organization.id} />
+            </HStack>
+
+            <Tooltip
+              ml="auto"
+              content={
+                organization.onceModerated ? "Опубликована" : "Не опубликована"
+              }
+              openDelay={750}
+              closeDelay={100}
+              contentProps={{
+                css: {
+                  "--tooltip-bg": organization.onceModerated ? "green" : "red",
+                },
+              }}
+              positioning={{ offset: { mainAxis: 3 } }}
+            >
+              <Badge
+                aspectRatio="1"
+                colorPalette={organization.onceModerated ? "green" : "red"}
+                rounded="full"
+                size="md"
+              >
+                {organization.onceModerated ? (
+                  <TbZoomCheckFilled />
+                ) : (
+                  <TbZoomCancelFilled />
+                )}
+              </Badge>
+            </Tooltip>
+          </HStack>
+        </Card.Title>
         <Card.Description h="16" lineClamp="3">
           {organization.description}
         </Card.Description>
-
-        <Stack position="absolute" top="2" left="3">
-          <Center
-            w="fit"
-            gap="6px"
-            px="2"
-            py="1"
-            borderWidth="1px"
-            borderColor="border.muted"
-            rounded="md"
-            shadow="sm"
-            bg={organization.onceModerated ? "green.muted" : "red.muted"}
-          >
-            <Text textStyle="sm" fontWeight="medium">
-              {organization.onceModerated ? "Опубликовано" : "Не опубликовано"}
-            </Text>
-          </Center>
-
-          <Center
-            w="fit"
-            gap="6px"
-            px="2"
-            py="1"
-            borderWidth="1px"
-            borderColor="border.muted"
-            rounded="md"
-            shadow="sm"
-            bg="teal.muted"
-          >
-            <Text textStyle="sm" fontWeight="medium">
-              {organization.organizationType}
-            </Text>
-          </Center>
-
-          <Center
-            w="fit"
-            gap="6px"
-            px="2"
-            py="1"
-            bg="white"
-            borderWidth="1px"
-            borderColor="border.muted"
-            rounded="md"
-            shadow="sm"
-          >
-            <Icon size="sm" color="yellow.400">
-              <TbStarFilled />
-            </Icon>
-            <Text textStyle="sm" fontWeight="medium">
-              {organization.avgRating || "Нет отзывов"}
-            </Text>
-          </Center>
-        </Stack>
-
-        <GridItemMenu
-          position="absolute"
-          top="2"
-          right="3"
-          id={organization.id}
-        />
       </Card.Body>
     </Card.Root>
   );
