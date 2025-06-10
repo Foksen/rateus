@@ -14,33 +14,32 @@ const months = [
 ];
 
 export function formatDateTime(input) {
-  const [datePart, timePart] = input.split(" ");
-  const [day, month, year] = datePart.split(".").map(Number);
-  const [hours, minutes] = timePart.split(":").map(Number);
+  if (!input) return "";
 
-  const inputDate = new Date(year, month - 1, day, hours, minutes);
+  const date = new Date(input);
+  if (isNaN(date.getTime())) return "";
 
   const now = new Date();
 
   const isToday =
-    inputDate.getDate() === now.getDate() &&
-    inputDate.getMonth() === now.getMonth() &&
-    inputDate.getFullYear() === now.getFullYear();
+    date.getDate() === now.getDate() &&
+    date.getMonth() === now.getMonth() &&
+    date.getFullYear() === now.getFullYear();
+
+  const h = String(date.getHours()).padStart(2, "0");
+  const m = String(date.getMinutes()).padStart(2, "0");
+  const timeStr = `${h}:${m}`;
 
   if (isToday) {
-    const h = String(inputDate.getHours()).padStart(2, "0");
-    const m = String(inputDate.getMinutes()).padStart(2, "0");
-    return `${h}:${m}`;
+    return `Сегодня, ${timeStr}`;
   }
 
-  const isThisYear = inputDate.getFullYear() === now.getFullYear();
+  const dayStr = date.getDate();
+  const monthStr = months[date.getMonth()];
 
-  const dayStr = inputDate.getDate();
-  const monthStr = months[inputDate.getMonth()];
-
-  if (isThisYear) {
-    return `${dayStr} ${monthStr}`;
+  if (date.getFullYear() === now.getFullYear()) {
+    return `${dayStr} ${monthStr}, ${timeStr}`;
+  } else {
+    return `${dayStr} ${monthStr} ${date.getFullYear()}`;
   }
-
-  return `${dayStr} ${monthStr} ${inputDate.getFullYear()}`;
 }

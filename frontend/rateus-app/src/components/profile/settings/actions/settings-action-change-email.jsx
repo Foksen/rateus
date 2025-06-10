@@ -10,7 +10,6 @@ import {
   Portal,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { REQUEST_TYPE } from "@/constants/request-type";
 // import { useRouter } from "next/navigation";
 
 function mapEmailError(error) {
@@ -43,14 +42,9 @@ export function SettingsActionChangeEmail({ session, setEmail }) {
     const email = data.email;
 
     try {
-      await patchUser(
-        session.accessToken,
-        session.user.id,
-        {
-          email,
-        },
-        REQUEST_TYPE.CLIENT
-      );
+      await patchUser(session.accessToken, session.user.id, {
+        email,
+      });
       // TODO: Рефактор аутентификации, сделать получение user из БД, можно будет убрать из JWT всё кроме ID
       // router.refresh();
       setEmail(email);

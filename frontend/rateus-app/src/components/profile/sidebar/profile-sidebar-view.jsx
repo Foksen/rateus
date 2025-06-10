@@ -110,7 +110,7 @@ function createSidebarLink(profilePage, key) {
     case PROFILE_PAGE.REVIEW_BRIEFS_SELF:
       return (
         <SidebarLink
-          title="Новые отзывы"
+          title="Заявки на отзывы"
           icon={<TbMessageCog />}
           href={href}
           key={key}
@@ -150,7 +150,7 @@ function createSidebarLink(profilePage, key) {
     case PROFILE_PAGE.ORGANIZATION_BRIEFS_SELF:
       return (
         <SidebarLink
-          title="Новые организации"
+          title="Заявки на организации"
           icon={<TbBuildingCog />}
           href={href}
           key={key}

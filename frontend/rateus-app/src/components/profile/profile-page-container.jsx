@@ -7,17 +7,30 @@ import { UsersContainer } from "./users/users-conainter";
 import { OrganizationTypesContainer } from "./organization-types/organization-types-container";
 import {
   getAvailableOrganizationTypes,
+  getOrganizationBrief,
   getOrganizationTypes,
   getSelfOrganization,
+  getSelfOrganizationBriefs,
   getSelfOrganizations,
 } from "@/lib/api/organizations";
-import { OrganizationsSelfContainer } from "./organizations-self/organizations-self-container";
+import { OrganizationsSelfContainer } from "./organizations/organizations-container";
 import { OrganizationSaveContainer } from "./organization-save/organization-save-containter";
-import { REQUEST_TYPE } from "@/constants/request-type";
+import { OrganizationBriefsSelfContainer } from "./organization-briefs/organization-briefs-container";
+import { OrganizationBriefContainer } from "./organization-brief/organization-brief-container";
 
 export async function ProfilePageContainer({ profilePage, session }) {
   if (!Array.isArray(profilePage)) {
     return null;
+  }
+
+  if (profilePage[0] === PROFILE_PAGE.ORGANIZATION_BRIEF) {
+    const id = profilePage[1];
+    return (
+      <OrganizationBriefContainer
+        session={session}
+        organizationBrief={await getOrganizationBrief(session.token, id)}
+      />
+    );
   }
 
   if (profilePage[0] === PROFILE_PAGE.ORGANIZATIONS_SELF) {
@@ -27,33 +40,30 @@ export async function ProfilePageContainer({ profilePage, session }) {
         return (
           <OrganizationSaveContainer
             session={session}
-            initialOrganizationTypes={await getAvailableOrganizationTypes(
-              REQUEST_TYPE.SSR
-            )}
+            initialOrganizationTypes={await getAvailableOrganizationTypes()}
           />
         );
       }
       return (
         <OrganizationSaveContainer
           session={session}
-          initialOrganizationTypes={await getAvailableOrganizationTypes(
-            REQUEST_TYPE.SSR
-          )}
-          initialOrganization={await getSelfOrganization(
-            session.token,
-            id,
-            REQUEST_TYPE.SSR
-          )}
+          initialOrganizationTypes={await getAvailableOrganizationTypes()}
+          initialOrganization={await getSelfOrganization(session.token, id)}
         />
       );
     }
 
     return (
       <OrganizationsSelfContainer
-        organizations={await getSelfOrganizations(
-          session.token,
-          REQUEST_TYPE.SSR
-        )}
+        organizations={await getSelfOrganizations(session.token)}
+      />
+    );
+  }
+
+  if (profilePage[0] === PROFILE_PAGE.ORGANIZATION_BRIEFS_SELF) {
+    return (
+      <OrganizationBriefsSelfContainer
+        organizationBriefs={await getSelfOrganizationBriefs(session.token)}
       />
     );
   }
@@ -62,7 +72,7 @@ export async function ProfilePageContainer({ profilePage, session }) {
     return (
       <OrganizationTypesContainer
         session={session}
-        initialOrganizationTypes={await getOrganizationTypes(REQUEST_TYPE.SSR)}
+        initialOrganizationTypes={await getOrganizationTypes()}
       />
     );
   }

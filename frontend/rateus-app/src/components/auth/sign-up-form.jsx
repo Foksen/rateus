@@ -18,7 +18,6 @@ import { registerUserWithEmail } from "@/lib/api/back-auth";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { mapSignUpErrors } from "@/lib/utils/map-errors";
-import { REQUEST_TYPE } from "@/constants/request-type";
 
 export function SignUpForm({}) {
   const {
@@ -41,15 +40,12 @@ export function SignUpForm({}) {
     }
 
     try {
-      const response = await registerUserWithEmail(
-        {
-          name: data.name,
-          surname: data.surname,
-          email: data.email,
-          password: data.password,
-        },
-        REQUEST_TYPE.CLIENT
-      );
+      const response = await registerUserWithEmail({
+        name: data.name,
+        surname: data.surname,
+        email: data.email,
+        password: data.password,
+      });
       const token = response.token;
       if (token) {
         await signIn("credentials", {

@@ -2,7 +2,7 @@ import { PROFILE_PAGE } from "@/constants/profile-pages";
 import { ACCENT_COLOR } from "@/constants/ui";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import Link from "next/link";
-import { OrganizationsSelfGrid } from "./organizations-self-grid";
+import { OrganizationsSelfGrid } from "./organizations-grid";
 
 export function OrganizationsSelfContent({ organizations }) {
   return (

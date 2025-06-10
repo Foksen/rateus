@@ -16,6 +16,7 @@ public interface BriefMapper {
     @Mapping(source = "owner.id", target = "ownerId")
     @Mapping(source = "organization.id", target = "organizationId")
     @Mapping(source = "organizationType.id", target = "organizationTypeId")
+    @Mapping(source = "organizationType.name", target = "organizationType")
     OrganizationBriefResponse mapOrganizationBrief(OrganizationBrief organizationBrief);
 
     @Mapping(source = "author.id", target = "authorId")

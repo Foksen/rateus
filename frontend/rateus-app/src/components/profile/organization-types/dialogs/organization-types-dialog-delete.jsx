@@ -1,4 +1,3 @@
-import { REQUEST_TYPE } from "@/constants/request-type";
 import { deleteOrganizationType } from "@/lib/api/organizations";
 import { Button, CloseButton, Dialog, Portal, Text } from "@chakra-ui/react";
 import { useRef } from "react";
@@ -16,8 +15,7 @@ export function OrganizationTypesDialogDelete({
     try {
       const result = await deleteOrganizationType(
         session.token,
-        organizationType.id,
-        REQUEST_TYPE.CLIENT
+        organizationType.id
       );
       removeOrganizationType(organizationType.id);
       setDeleteDialogOpen(false);

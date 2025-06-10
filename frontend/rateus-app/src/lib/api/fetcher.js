@@ -1,27 +1,16 @@
-import { REQUEST_TYPE } from "@/constants/request-type";
-
 export async function backendFetch(
   url,
-  { method = "GET", data = null, accessToken = null, params = null } = {},
-  requestType
+  { method = "GET", data = null, accessToken = null, params = null } = {}
 ) {
   console.log("Container backend url:", process.env.NEXT_BACKEND_CONTAINER_URL);
   console.log("Public url:", process.env.NEXT_PUBLIC_BACKEND_URL);
-  console.log("Request type:", requestType);
 
   let baseUrl;
-  switch (requestType) {
-    case REQUEST_TYPE.SSR: {
-      baseUrl = process.env.NEXT_BACKEND_CONTAINER_URL;
-      break;
-    }
-    case REQUEST_TYPE.CLIENT: {
-      baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      break;
-    }
-    default: {
-      baseUrl = "http://localhost:8080";
-    }
+
+  if (typeof window === "undefined") {
+    baseUrl = process.env.NEXT_BACKEND_CONTAINER_URL;
+  } else {
+    baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   }
 
   const headers = {

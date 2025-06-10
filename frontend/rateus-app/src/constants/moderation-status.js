@@ -1,0 +1,5 @@
+export const MODERATION_STATUS = {
+  NEW: "NEW",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+};
