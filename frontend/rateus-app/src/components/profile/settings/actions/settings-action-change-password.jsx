@@ -1,5 +1,4 @@
 import { PasswordInput } from "@/components/ui/password-input";
-import { REQUEST_TYPE } from "@/constants/request-type";
 import { ACCENT_COLOR, SETTINGS_ACTION_BUTTON_VARIANT } from "@/constants/ui";
 import { patchUser } from "@/lib/api/user";
 import { Button, Dialog, Field, Fieldset, Portal } from "@chakra-ui/react";
@@ -37,14 +36,9 @@ export function SettingsActionChangePassword({ session }) {
     }
 
     try {
-      await patchUser(
-        session.accessToken,
-        session.user.id,
-        {
-          password,
-        },
-        REQUEST_TYPE.CLIENT
-      );
+      await patchUser(session.accessToken, session.user.id, {
+        password,
+      });
       // TODO: Рефактор аутентификации, сделать получение user из БД, можно будет убрать из JWT всё кроме ID
       // router.refresh();
       setOpen(false);

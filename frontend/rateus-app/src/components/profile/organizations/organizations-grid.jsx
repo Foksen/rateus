@@ -1,5 +1,5 @@
 import { Grid } from "@chakra-ui/react";
-import { OrganizationsSelfGridItem } from "./organizations-self-grid-item";
+import { OrganizationsSelfGridItem } from "./organizations-grid-item";
 
 export function OrganizationsSelfGrid({ organizations }) {
   return (

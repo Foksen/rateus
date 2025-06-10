@@ -1,4 +1,3 @@
-import { REQUEST_TYPE } from "@/constants/request-type";
 import { loginWithEmail } from "@/lib/api/back-auth";
 import { parseJwt } from "@/lib/utils/parseJwt";
 import nextAuthModule from "next-auth";
@@ -22,13 +21,10 @@ export const authOptions = {
           if (credentials.token) {
             token = credentials.token;
           } else {
-            const response = await loginWithEmail(
-              {
-                email: credentials.email,
-                password: credentials.password,
-              },
-              REQUEST_TYPE.SSR
-            );
+            const response = await loginWithEmail({
+              email: credentials.email,
+              password: credentials.password,
+            });
             if (!response || !response.token) {
               console.log(response);
               const error = new Error(

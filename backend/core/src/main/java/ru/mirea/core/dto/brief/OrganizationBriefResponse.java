@@ -13,6 +13,7 @@ public record OrganizationBriefResponse(
         Boolean isNew,
         String name,
         Integer organizationTypeId,
+        String organizationType,
         String description,
         @Nullable String websiteUrl,
         String photoUrl,
