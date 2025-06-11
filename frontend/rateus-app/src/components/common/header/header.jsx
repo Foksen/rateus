@@ -48,7 +48,7 @@ export function Header({ session }) {
           <Link href="/profile">
             <Profile
               size="sm"
-              username={`${session.user.surname} ${session?.user?.name?.[0]}.`}
+              username={`${session.user.name} ${session?.user?.surname?.[0]}.`}
               avatarUrl={session.user.avatarUrl}
               hideRole={true}
             />

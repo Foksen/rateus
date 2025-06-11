@@ -7,6 +7,8 @@ import ru.mirea.core.dto.auth.UserResponse;
 import ru.mirea.core.entity.auth.User;
 import ru.mirea.core.model.UserPatchData;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface UserMapper {
 
@@ -15,4 +17,8 @@ public interface UserMapper {
     UserPatchRequest map(UserPatchData userPatchData);
 
     UserResponse map(User user);
+
+    default List<UserResponse> map(List<User> users) {
+        return users.stream().map(this::map).toList();
+    }
 }

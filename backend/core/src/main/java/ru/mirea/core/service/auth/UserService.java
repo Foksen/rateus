@@ -16,8 +16,11 @@ import ru.mirea.core.exception.UserNotFoundException;
 import ru.mirea.core.model.UserPatchData;
 import ru.mirea.core.repository.auth.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static java.util.Objects.requireNonNullElse;
 
@@ -49,7 +52,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserPatchData patchUser(UserDetails userDetails, UUID id, UserPatchData userPatchData)
+    public User patchUser(UserDetails userDetails, UUID id, UserPatchData userPatchData)
             throws BadRequestException
     {
         User oldUser = userRepository.findById(id)
@@ -93,8 +96,16 @@ public class UserService {
                 .avatarUrl(requireNonNullElse(userPatchData.avatarUrl(), oldUser.getAvatarUrl()))
                 .createdAt(oldUser.getCreatedAt())
                 .build();
-        User savedUser = userRepository.save(newUser);
 
-        return userPatchData;
+        return userRepository.save(newUser);
+    }
+
+    public List<User> getUsers() {
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteUser(UUID id) {
+        userRepository.deleteById(id);
     }
 }

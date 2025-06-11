@@ -55,6 +55,8 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, "/organizations/public/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/reviews/public/**").permitAll()
                                 .requestMatchers(HttpMethod.PATCH, "/briefs/**").hasAnyRole("MODERATOR", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

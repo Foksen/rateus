@@ -6,6 +6,9 @@ export const mapSignInErrors = (error) => {
   if (errorLc.includes("bad credentials")) {
     return { global: "Неверный пароль" };
   }
+  if (errorLc.includes("user account is locked")) {
+    return { global: "Вы забанены. До свидания!" };
+  }
   return { global: "Произошла ошибка. Попробуйте ещё раз" };
 };
 
@@ -47,7 +50,6 @@ export const mapSignUpErrors = (error, setError) => {
   }
   setError("root", { message: "Произошла ошибка. Попробуйте ещё раз" });
 };
-
 
 export const mapOrganizationTypeError = (error) => {
   const errorLc = error?.toLowerCase() ?? "";
