@@ -8,6 +8,8 @@ import java.util.UUID;
 public record ReviewBriefResponse(
         UUID id,
         UUID authorId,
+        String authorNameSurname,
+        String authorAvatarUrl,
         UUID reviewId,
         UUID organizationId,
         Boolean isNew,

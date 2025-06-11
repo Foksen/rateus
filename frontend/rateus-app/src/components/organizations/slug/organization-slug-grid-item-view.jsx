@@ -5,7 +5,7 @@ import { TbStarFilled } from "react-icons/tb";
 
 export function OrganizationSlugGridItemView({ review }) {
   return (
-    <Card.Root>
+    <Card.Root borderColor="border.muted">
       <Card.Body>
         <HStack justify="space-between">
           <HStack gap="4">

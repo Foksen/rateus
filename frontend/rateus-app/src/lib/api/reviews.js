@@ -16,3 +16,31 @@ export async function getOrganizationReviews(organizationId) {
     },
   });
 }
+
+export async function getSelfReviews(token) {
+  return backendFetch("/api/reviews/self", {
+    method: "GET",
+    accessToken: token,
+  });
+}
+
+export async function getReviewBrief(token, id) {
+  return backendFetch(`/api/briefs/reviews/${id}`, {
+    method: "GET",
+    accessToken: token,
+  });
+}
+
+export async function getSelfReviewBriefs(token) {
+  return backendFetch("/api/briefs/reviews/self", {
+    method: "GET",
+    accessToken: token,
+  });
+}
+
+export async function updateReviewBriefStatus(token, id, status) {
+  return backendFetch(`/api/briefs/reviews/${id}/${status}`, {
+    method: "PATCH",
+    accessToken: token,
+  });
+}

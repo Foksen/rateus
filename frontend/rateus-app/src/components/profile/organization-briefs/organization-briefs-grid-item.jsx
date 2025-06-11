@@ -1,25 +1,17 @@
 import { Tooltip } from "@/components/ui/tooltip";
 import { MODERATION_STATUS } from "@/constants/moderation-status";
 import { PROFILE_PAGE } from "@/constants/profile-pages";
-import { pickPalette, pickRatingPalette } from "@/lib/utils/pick-palette";
 import {
   Badge,
   Card,
   HStack,
-  Icon,
-  IconButton,
   Image,
-  Menu,
-  Portal,
   Text,
 } from "@chakra-ui/react";
 import {
   TbEye,
   TbEyeCancel,
   TbEyeCheck,
-  TbPencilCog,
-  TbZoomCancelFilled,
-  TbZoomCheckFilled,
 } from "react-icons/tb";
 import Link from "next/link";
 
@@ -65,7 +57,7 @@ const getStatusBadgeIcon = (status) => {
   }
 };
 
-export function OrganizationBriefsSelfGridItem({ organizationBrief }) {
+export function OrganizationBriefsGridItem({ organizationBrief }) {
   return (
     <Link
       href={`/profile/${PROFILE_PAGE.ORGANIZATION_BRIEF}/${organizationBrief.id}`}

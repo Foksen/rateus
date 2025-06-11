@@ -1,7 +1,7 @@
 import { Grid } from "@chakra-ui/react";
-import { OrganizationsGridItem } from "./organizations-grid-item";
+import { ReviewsGridItem } from "./reviews-grid-item";
 
-export function OrganizationsGrid({ organizations }) {
+export function ReviewsGrid({ reviews }) {
   return (
     <Grid
       mt="6"
@@ -12,8 +12,8 @@ export function OrganizationsGrid({ organizations }) {
       }}
       gap="5"
     >
-      {organizations?.map((organization, index) => (
-        <OrganizationsGridItem organization={organization} key={index} />
+      {reviews?.map((review, index) => (
+        <ReviewsGridItem review={review} key={index} />
       ))}
     </Grid>
   );
