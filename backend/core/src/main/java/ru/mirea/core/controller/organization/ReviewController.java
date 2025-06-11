@@ -2,6 +2,7 @@ package ru.mirea.core.controller.organization;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class ReviewController {
     @PostMapping
     public ReviewBriefResponse createReview(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody ReviewSaveRequest request
+            @RequestBody @Valid ReviewSaveRequest request
     ) {
         ReviewBrief reviewBrief = reviewService.createReview(
                 userDetails,
@@ -52,7 +53,7 @@ public class ReviewController {
     public ReviewBriefResponse updateReview(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("reviewId") UUID reviewId,
-            @RequestBody ReviewSaveRequest request
+            @RequestBody @Valid ReviewSaveRequest request
     ) {
         ReviewBrief reviewBrief = reviewService.createReview(
                 userDetails,

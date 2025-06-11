@@ -58,25 +58,14 @@ export function SignUpForm({}) {
       }
     } catch (error) {
       setIsLoading(false);
-      const errorResponse = mapSignUpErrors(error?.data?.message);
-      const errorEmailResponse = errorResponse.email;
-      const errorRootResponse = errorResponse.root;
-
-      if (errorEmailResponse) {
-        setError("email", {
-          message: errorEmailResponse,
-        });
-      }
-
-      if (errorRootResponse) {
-        setError("root", {
-          message: errorRootResponse,
-        });
-      }
+      const errorResponse = mapSignUpErrors(error?.data?.message, setError);
     }
     setIsLoading(false);
   });
 
+  const nameError = errors?.name?.message;
+  const surnameError = errors?.surname?.message;
+  const passwordError = errors?.password?.message;
   const emailError = errors?.email?.message;
   const repeatedPasswordError = errors?.repeatedPassword?.message;
   const rootError = errors?.root?.message;
@@ -98,7 +87,7 @@ export function SignUpForm({}) {
 
       <Fieldset.Root mt="2" invalid={rootError}>
         <Fieldset.Content>
-          <Field.Root>
+          <Field.Root invalid={nameError}>
             <Field.Label>Ваше имя</Field.Label>
             <Input
               placeholder="Сергей"
@@ -106,9 +95,10 @@ export function SignUpForm({}) {
                 required: "Введите имя",
               })}
             />
+            <Field.ErrorText>{nameError}</Field.ErrorText>
           </Field.Root>
 
-          <Field.Root>
+          <Field.Root invalid={surnameError}>
             <Field.Label>Ваша фамилия</Field.Label>
             <Input
               placeholder="Сергей"
@@ -116,6 +106,7 @@ export function SignUpForm({}) {
                 required: "Введите фамилию",
               })}
             />
+            <Field.ErrorText>{surnameError}</Field.ErrorText>
           </Field.Root>
 
           <Field.Root invalid={emailError}>
@@ -130,7 +121,7 @@ export function SignUpForm({}) {
             <Field.ErrorText>{emailError}</Field.ErrorText>
           </Field.Root>
 
-          <Field.Root>
+          <Field.Root invalid={passwordError}>
             <Field.Label>Пароль</Field.Label>
             <PasswordInput
               placeholder="qwerty123"
@@ -138,6 +129,7 @@ export function SignUpForm({}) {
                 required: "Введите пароль",
               })}
             />
+            <Field.ErrorText>{passwordError}</Field.ErrorText>
           </Field.Root>
 
           <Field.Root invalid={repeatedPasswordError}>
@@ -168,7 +160,7 @@ export function SignUpForm({}) {
       <Text mt="4" fontWeight="medium" textStyle="sm" alignSelf="center">
         Уже есть аккаунт?&nbsp;
         <ChakraLink variant="underline" outline="none" asChild>
-          <Link href="/auth/sign-in">Зарегистрироваться</Link>
+          <Link href="/auth/sign-in">Войти</Link>
         </ChakraLink>
       </Text>
     </VStack>
