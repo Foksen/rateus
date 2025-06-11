@@ -46,38 +46,40 @@ public class AuthService {
     }
 
     public String authenticateWithEmail(String email, String password) {
-        if (userService.findUserByEmail(email)
+        String emailLowerCase = email.toLowerCase();
+        if (userService.findUserByEmail(emailLowerCase)
                 .map(User::getUserProvider)
                 .orElse(UserProvider.EMAIL) != UserProvider.EMAIL
         ) {
             throw new InvalidUserProviderException("This email is already used with another provider");
         }
-        return createAuthenticationToken(email, password);
+        return createAuthenticationToken(emailLowerCase, password);
     }
 
     public String authenticateWithYandex(String code) {
         String accessToken = yandexOAuthClient.authorizeWithCode(code).accessToken();
         YandexProfileResponse yandexProfile = yandexProfileClient.getProfile(accessToken);
 
-        User yandexUser = userService.findUserByEmail(yandexProfile.defaultEmail()).orElse(null);
+        User yandexUser = userService.findUserByEmail(yandexProfile.defaultEmail().toLowerCase()).orElse(null);
         if (yandexUser == null) {
             return registerWithYandex(
                     yandexProfile.firstName(),
                     yandexProfile.lastName(),
-                    yandexProfile.defaultEmail(),
+                    yandexProfile.defaultEmail().toLowerCase(),
                     buildYandexAvatarUrl(yandexProfile.defaultAvatarId())
             );
         }
         if (yandexUser.getUserProvider() != UserProvider.YANDEX) {
             throw new InvalidUserProviderException("This email is already used with another provider");
         }
-        return createAuthenticationToken(yandexUser.getEmail(), defaultYandexPassword);
+        return createAuthenticationToken(yandexUser.getEmail().toLowerCase(), defaultYandexPassword);
     }
 
     public String registerWithEmail(String name, String surname, String email, String password) {
+        String emailLowerCase = email.toLowerCase();
         String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder()
-                .email(email)
+                .email(emailLowerCase)
                 .password(encodedPassword)
                 .name(name)
                 .surname(surname)
@@ -86,7 +88,7 @@ public class AuthService {
                 .userProvider(UserProvider.EMAIL)
                 .build();
         userService.saveUser(user);
-        return createAuthenticationToken(email, password);
+        return createAuthenticationToken(emailLowerCase, password);
     }
 
     private String createAuthenticationToken(String email, String password) {
