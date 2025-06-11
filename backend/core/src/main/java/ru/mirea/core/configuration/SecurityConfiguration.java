@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.DELETE, "/organizations/types/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/organizations").hasAnyRole("OWNER", "MODERATOR", "ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/organizations/public/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/reviews/public/**").permitAll()
                                 .requestMatchers(HttpMethod.PATCH, "/briefs/**").hasAnyRole("MODERATOR", "ADMIN")
                                 .anyRequest().authenticated()
                 );

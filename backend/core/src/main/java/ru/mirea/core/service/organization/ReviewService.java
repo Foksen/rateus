@@ -1,5 +1,6 @@
 package ru.mirea.core.service.organization;
 
+import jakarta.annotation.Nullable;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import ru.mirea.core.repository.organization.ReviewRepository;
 import ru.mirea.core.service.auth.UserService;
 import ru.mirea.core.service.brief.BriefService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -79,5 +81,31 @@ public class ReviewService {
                 .build();
 
         return briefService.createReviewBrief(updatedReview, false);
+    }
+
+    public List<Review> getSelfReviews(UserDetails userDetails) {
+        return reviewRepository.findByAuthorEmail(userDetails.getUsername());
+    }
+
+    public Review getSelfReview(UserDetails userDetails, UUID id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found with id " + id));
+
+        if (!review.getAuthor().getEmail().equals(userDetails.getUsername())) {
+            throw new AuthorizationDeniedException("User " + userDetails.getUsername() +
+                    " has no access for review " + id);
+        }
+
+        return review;
+    }
+
+    public List<Review> getPublicReviews(UUID organizationId) {
+        return reviewRepository.findByOrganizationId(organizationId);
+    }
+
+    public Review getPublicReview(UUID id) {
+        return reviewRepository.findById(id)
+                .filter(Review::getOnceModerated)
+                .orElseThrow(() -> new RuntimeException("Review not found with id " + id));
     }
 }
