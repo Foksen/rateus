@@ -114,7 +114,7 @@ function OrganizationBriefView({ organizationBrief }) {
               variant="surface"
               rounded="full"
             >
-              {organizationBrief.isNew ? "Новая" : "Обновлённая"}
+              {organizationBrief.isNew ? "Создание" : "Обновление"}
             </Badge>
           </HStack>
         </Field.Root>
@@ -157,15 +157,11 @@ export function OrganizationBriefContent({ session, organizationBrief }) {
     }
   };
 
-  // http://localhost:3000/profile/organization-brief/d5c4e1e5-0cfb-4e53-a18f-4846b1bc6d70
-
   return (
     <Box mt="5">
       <OrganizationBriefView organizationBrief={organizationBrief} />
 
-      {[USER_ROLE.MODERATOR, USER_ROLE.ADMIN, USER_ROLE.OWNER].includes(
-        session.user.role
-      ) &&
+      {[USER_ROLE.MODERATOR, USER_ROLE.ADMIN].includes(session.user.role) &&
         organizationBrief.status === MODERATION_STATUS.NEW && (
           <Flex mt="8" gap="8" justify="end">
             <Button

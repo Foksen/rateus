@@ -6,6 +6,8 @@ import java.util.UUID;
 public record ReviewResponse(
     UUID id,
     UUID authorId,
+    String authorNameSurname,
+    String authorAvatarUrl,
     UUID organizationId,
     Integer rating,
     String comment,

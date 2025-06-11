@@ -100,7 +100,7 @@ public class ReviewService {
     }
 
     public List<Review> getPublicReviews(UUID organizationId) {
-        return reviewRepository.findByOrganizationId(organizationId);
+        return reviewRepository.findByOrganizationIdAndOnceModeratedTrue(organizationId);
     }
 
     public Review getPublicReview(UUID id) {
