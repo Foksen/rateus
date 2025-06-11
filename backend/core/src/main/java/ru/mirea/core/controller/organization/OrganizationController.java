@@ -2,6 +2,7 @@ package ru.mirea.core.controller.organization;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class OrganizationController {
     @PostMapping
     public OrganizationBriefResponse createOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody OrganizationSaveRequest request
+            @RequestBody @Valid OrganizationSaveRequest request
     ) {
         OrganizationBrief organizationBrief = organizationService.createOrganization(
                 userDetails,
@@ -58,7 +59,7 @@ public class OrganizationController {
     public OrganizationBriefResponse updateOrganization(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("organizationId") UUID organizationId,
-            @RequestBody OrganizationSaveRequest request
+            @RequestBody @Valid OrganizationSaveRequest request
     ) {
         OrganizationBrief organizationBrief = organizationService.updateOrganization(
                 userDetails,

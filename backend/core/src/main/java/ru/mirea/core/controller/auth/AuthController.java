@@ -1,6 +1,7 @@
 package ru.mirea.core.controller.auth;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/sign-in/email")
-    public TokenResponse signInWithEmail(@RequestBody SignInEmailRequest request) {
+    public TokenResponse signInWithEmail(@RequestBody @Valid SignInEmailRequest request) {
         String token = authService.authenticateWithEmail(
                 request.email(),
                 request.password()
@@ -36,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up/email")
-    public TokenResponse signUpWithEmail(@RequestBody SignUpEmailRequest request) {
+    public TokenResponse signUpWithEmail(@RequestBody @Valid SignUpEmailRequest request) {
         String token = authService.registerWithEmail(
                 request.name(),
                 request.surname(),

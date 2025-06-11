@@ -21,6 +21,52 @@ import {
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 
+function setErrorMessages(errorMessage, setError) {
+  if (errorMessage.includes("Минимальная длина названия - 16 символов")) {
+    setError("name", {
+      message: "Минимальная длина названия - 16 символов",
+    });
+  } else if (
+    errorMessage.includes("Максимальная длина названия - 256 символов")
+  ) {
+    setError("name", {
+      message: "Максимальная длина названия - 256 символов",
+    });
+  }
+
+  if (errorMessage.includes("Минимальная длина описания - 30 символов")) {
+    setError("description", {
+      message: "Минимальная длина описания - 30 символов",
+    });
+  } else if (
+    errorMessage.includes("Максимальная длина описания - 2000 символов")
+  ) {
+    setError("description", {
+      message: "Максимальная длина описания - 2000 символов",
+    });
+  }
+
+  if (
+    errorMessage.includes("Допустимая длина названия - от 16 до 256 символов")
+  ) {
+    setError("name", {
+      message: "Допустимая длина названия - от 16 до 256 символов",
+    });
+  }
+  if (
+    errorMessage.includes("Допустимая длина описания - от 30 до 2000 символов")
+  ) {
+    setError("description", {
+      message: "Допустимая длина описания - от 30 до 2000 символов",
+    });
+  }
+  if (errorMessage.includes("Некорректная ссылка на изображение")) {
+    setError("photoUrl", {
+      message: "Некорректная ссылка на изображение",
+    });
+  }
+}
+
 export function OrganizationSaveView({
   session,
   initialOrganization,
@@ -33,7 +79,8 @@ export function OrganizationSaveView({
     handleSubmit,
     reset,
     control,
-    formState: { isValid },
+    setError,
+    formState: { isValid, errors },
   } = useForm({
     defaultValues: initialOrganization
       ? {
@@ -55,7 +102,9 @@ export function OrganizationSaveView({
       photoUrl: data.photoUrl,
     };
 
-    {
+    console.log(requestBody);
+
+    try {
       initialOrganization
         ? await updateOrganization(
             session.token,
@@ -63,9 +112,13 @@ export function OrganizationSaveView({
             requestBody
           )
         : await createOrganization(session.token, requestBody);
-    }
 
-    router.push(`/profile/${PROFILE_PAGE.ORGANIZATION_BRIEFS_SELF}`);
+      router.push(`/profile/${PROFILE_PAGE.ORGANIZATION_BRIEFS_SELF}`);
+    } catch (error) {
+      const errorMsg = error.data.message;
+
+      setErrorMessages(errorMsg, setError);
+    }
   });
 
   const organizationTypes = createListCollection({
@@ -93,7 +146,7 @@ export function OrganizationSaveView({
         </Stack>
 
         <Fieldset.Content>
-          <Field.Root>
+          <Field.Root invalid={errors?.name?.message}>
             <Field.Label>Название</Field.Label>
             <Input
               placeholder="Гостиница Саров"
@@ -101,9 +154,10 @@ export function OrganizationSaveView({
                 required: "Введите название",
               })}
             />
+            <Field.ErrorText>{errors?.name?.message}</Field.ErrorText>
           </Field.Root>
 
-          <Field.Root>
+          <Field.Root invalid={errors?.description?.message}>
             <Field.Label>Описание</Field.Label>
             <Textarea
               minH="20"
@@ -112,6 +166,7 @@ export function OrganizationSaveView({
                 required: "Введите описание",
               })}
             />
+            <Field.ErrorText>{errors?.description?.message}</Field.ErrorText>
           </Field.Root>
 
           <Field.Root>
@@ -162,7 +217,7 @@ export function OrganizationSaveView({
             ></Controller>
           </Field.Root>
 
-          <Field.Root>
+          <Field.Root invalid={errors?.photoUrl?.message}>
             <Field.Label>Ссылка на изображение</Field.Label>
             <Input
               placeholder="https://..."
@@ -170,6 +225,7 @@ export function OrganizationSaveView({
                 required: "Вставьтее ссылку на изображение",
               })}
             />
+            <Field.ErrorText>{errors?.photoUrl?.message}</Field.ErrorText>
           </Field.Root>
 
           <Field.Root>
