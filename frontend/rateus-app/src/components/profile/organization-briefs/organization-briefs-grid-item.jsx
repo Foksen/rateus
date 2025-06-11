@@ -91,7 +91,7 @@ export function OrganizationBriefsSelfGridItem({ organizationBrief }) {
           variant="surface"
           rounded="full"
         >
-          {organizationBrief.isNew ? "Новая" : "Обновлённая"}
+          {organizationBrief.isNew ? "Создание" : "Обновление"}
         </Badge>
 
         <Card.Body gap="6px" p="5">

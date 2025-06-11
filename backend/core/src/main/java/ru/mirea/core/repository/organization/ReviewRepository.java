@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
     List<Review> findByAuthorEmail(String email);
-    List<Review> findByOrganizationId(UUID organizationId);
+    List<Review> findByOrganizationIdAndOnceModeratedTrue(UUID organizationId);
 }

@@ -17,9 +17,20 @@ import { OrganizationSlugGridItemView } from "./organization-slug-grid-item-view
 import { ACCENT_COLOR } from "@/constants/ui";
 import { OrganizationSlugActionCreateReview } from "./orginazation-slug-action-create-review";
 
-export function OrganizationSlugView({ session, organization }) {
+const formatReviewCountView = (n) => {
+  const last2 = n % 100;
+  const last = n % 10;
+  let word = "отзывов";
+  if (last2 < 11 || last2 > 14) {
+    if (last === 1) word = "отзыв";
+    else if (last >= 2 && last <= 4) word = "отзыва";
+  }
+  return `${n} ${word}`;
+};
+
+export function OrganizationSlugView({ session, organization, reviews }) {
   return (
-    <Box maxW="8xl" mx="auto" mt="10" px="10">
+    <Box maxW="8xl" mx="auto" py="10" px="10">
       <Box
         py="10"
         px="12"
@@ -76,7 +87,7 @@ export function OrganizationSlugView({ session, organization }) {
                   "Нет отзывов"}
               </Heading>
               <Text mt="3px" ml="3" color="fg.subtle">
-                1 отзыв
+                {formatReviewCountView(reviews.length)}
               </Text>
             </HStack>
           </Stack>
@@ -119,7 +130,9 @@ export function OrganizationSlugView({ session, organization }) {
           }}
           gap="5"
         >
-          <OrganizationSlugGridItemView />
+          {reviews.map((review, index) => (
+            <OrganizationSlugGridItemView review={review} key={index} />
+          ))}
         </Grid>
       </Box>
     </Box>
