@@ -1,10 +1,10 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { OrganizationBriefsSelfGrid } from "./organization-briefs-grid";
+import { OrganizationBriefsGrid } from "./organization-briefs-grid";
 
-export function OrganizationBriefsSelfContent({ organizationBriefs }) {
+export function OrganizationBriefsContent({ organizationBriefs }) {
   return (
     <Box>
-      <OrganizationBriefsSelfGrid organizationBriefs={organizationBriefs} />
+      <OrganizationBriefsGrid organizationBriefs={organizationBriefs} />
     </Box>
   );
 }

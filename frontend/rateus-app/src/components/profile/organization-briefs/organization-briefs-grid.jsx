@@ -1,7 +1,7 @@
 import { Grid } from "@chakra-ui/react";
-import { OrganizationBriefsSelfGridItem } from "./organization-briefs-grid-item";
+import { OrganizationBriefsGridItem } from "./organization-briefs-grid-item";
 
-export function OrganizationBriefsSelfGrid({ organizationBriefs }) {
+export function OrganizationBriefsGrid({ organizationBriefs }) {
   return (
     <Grid
       mt="6"
@@ -15,7 +15,7 @@ export function OrganizationBriefsSelfGrid({ organizationBriefs }) {
       {organizationBriefs
         ?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
         .map((organizationBrief, index) => (
-          <OrganizationBriefsSelfGridItem
+          <OrganizationBriefsGridItem
             organizationBrief={organizationBrief}
             key={index}
           />

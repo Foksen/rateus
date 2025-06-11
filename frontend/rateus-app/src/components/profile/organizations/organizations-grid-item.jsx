@@ -52,7 +52,7 @@ function GridItemMenu({ id }) {
   );
 }
 
-export function OrganizationsSelfGridItem({ organization }) {
+export function OrganizationsGridItem({ organization }) {
   return (
     <Card.Root overflow="hidden" cursor="default" borderColor="border.muted">
       <Image
@@ -110,6 +110,7 @@ export function OrganizationsSelfGridItem({ organization }) {
               positioning={{ offset: { mainAxis: 3 } }}
             >
               <Badge
+                w="fit"
                 aspectRatio="1"
                 colorPalette={organization.onceModerated ? "green" : "red"}
                 rounded="full"
