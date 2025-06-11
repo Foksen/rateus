@@ -70,7 +70,9 @@ export function ReviewBriefsGridItem({ reviewBrief }) {
             <HStack gap="4">
               <Avatar.Root
                 colorPalette={
-                  RAINBOW_AVATAR_COLORS ? pickPalette(username) : ACCENT_COLOR
+                  RAINBOW_AVATAR_COLORS
+                    ? pickPalette(reviewBrief.authorNameSurname)
+                    : ACCENT_COLOR
                 }
               >
                 <Avatar.Fallback name={reviewBrief.authorNameSurname} />

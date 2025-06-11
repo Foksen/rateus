@@ -25,6 +25,7 @@ import {
 } from "@/lib/api/reviews";
 import { ReviewBriefsContainer } from "./review-briefs/review-briefs-container";
 import { ReviewBriefContainer } from "./review-brief/review-brief-container";
+import { getUsers } from "@/lib/api/user";
 
 export async function ProfilePageContainer({ profilePage, session }) {
   if (!Array.isArray(profilePage)) {
@@ -94,6 +95,15 @@ export async function ProfilePageContainer({ profilePage, session }) {
     return (
       <ReviewBriefsContainer
         reviewBriefs={await getSelfReviewBriefs(session.token)}
+      />
+    );
+  }
+
+  if (profilePage[0] === PROFILE_PAGE.USERS) {
+    return (
+      <UsersContainer
+        initialUsers={await getUsers(session.token)}
+        session={session}
       />
     );
   }
