@@ -52,7 +52,7 @@ function GridItemMenu({ id }) {
   );
 }
 
-export function OrganizationsGridItem({ organization }) {
+export function OrganizationsSelfGridItem({ organization }) {
   return (
     <Card.Root overflow="hidden" cursor="default" borderColor="border.muted">
       <Image

@@ -9,11 +9,13 @@ import {
   getAvailableOrganizationTypes,
   getOrganizationBrief,
   getOrganizationTypes,
+  getPublicOrganization,
+  getPublicOrganizations,
   getSelfOrganization,
   getSelfOrganizationBriefs,
   getSelfOrganizations,
 } from "@/lib/api/organizations";
-import { OrganizationsContainer } from "./organizations/organizations-container";
+import { OrganizationsSelfContainer } from "./organizations/self/organizations-self-container";
 import { OrganizationSaveContainer } from "./organization-save/organization-save-containter";
 import { OrganizationBriefsSelfContainer } from "./organization-briefs/organization-briefs-container";
 import { OrganizationBriefContainer } from "./organization-brief/organization-brief-container";
@@ -31,6 +33,12 @@ export async function ProfilePageContainer({ profilePage, session }) {
   if (!Array.isArray(profilePage)) {
     return null;
   }
+
+  // if (profilePage[0] === PROFILE_PAGE.ORGANIZATIONS) {
+  //   return (
+  //     <OrganizationsContainer organizations={await getPublicOrganizations()} />
+  //   );
+  // }
 
   if (profilePage[0] === PROFILE_PAGE.ORGANIZATIONS_SELF) {
     if (profilePage[1] === "save") {
@@ -53,7 +61,7 @@ export async function ProfilePageContainer({ profilePage, session }) {
     }
 
     return (
-      <OrganizationsContainer
+      <OrganizationsSelfContainer
         organizations={await getSelfOrganizations(session.token)}
       />
     );
