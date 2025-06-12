@@ -108,4 +108,9 @@ public class UserService {
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
     }
+
+    public User getSelfUser(UserDetails userDetails) {
+        return userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found with email " + userDetails.getUsername()));
+    }
 }

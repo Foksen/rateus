@@ -244,7 +244,6 @@ export function ProfileSidebarView({
             title="Настройки"
             icon={<TbSettings />}
             href={`/profile/${PROFILE_COMMON_PAGE.SETTINGS}`}
-            disabled
           />
 
           <SidebarLink
