@@ -67,11 +67,11 @@ public class UserService {
         }
 
         if (isSelfUser) {
-            if (userPatchData.userRole() != null && userPatchData.userRole() != UserRole.OWNER) {
+            if (userPatchData.userRole() != null && userPatchData.userRole() != UserRole.OWNER && !isAdmin) {
                 throw new AccessDeniedException("User " + userDetails.getUsername() + " can change role only to owner");
             }
 
-            if (userPatchData.isBlocked() != null) {
+            if (userPatchData.isBlocked() != null && !isAdmin) {
                 throw new AccessDeniedException("User " + userDetails.getUsername() + " cannot change block flag");
             }
         }
@@ -81,7 +81,7 @@ public class UserService {
         }
 
         String email = requireNonNullElse(userPatchData.email(), oldUser.getEmail());
-        String passwordEncoded = (userPatchData.password() != null) ?
+        String passwordEncoded = (userPatchData.password() != null && !userPatchData.password().isEmpty()) ?
                 passwordEncoder.encode(userPatchData.password()) : oldUser.getPassword();
 
         User newUser = User.builder()
