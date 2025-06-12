@@ -1,3 +1,5 @@
+"use client";
+
 import { MODERATION_STATUS } from "@/constants/moderation-status";
 import { ACCENT_COLOR, RAINBOW_AVATAR_COLORS } from "@/constants/ui";
 import { USER_ROLE } from "@/constants/user-roles";
@@ -9,8 +11,10 @@ import {
   Avatar,
   Badge,
   Box,
+  Button,
   Field,
   Fieldset,
+  Flex,
   HStack,
   Icon,
   Link,
@@ -19,6 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { LuExternalLink } from "react-icons/lu";
 import { TbStarFilled } from "react-icons/tb";
+import { useState } from "react";
 
 const getAlertStatus = (briefStatus) => {
   switch (briefStatus) {
@@ -48,15 +53,15 @@ const getAlertTitle = (briefStatus) => {
   }
 };
 
-function ReviewBriefView({ reviewBrief }) {
+function ReviewBriefView({ reviewBrief, briefStatus }) {
   return (
     <Fieldset.Root>
       <Fieldset.Content>
         <Field.Root>
-          <Alert.Root status={getAlertStatus(reviewBrief.status)}>
+          <Alert.Root status={getAlertStatus(briefStatus)}>
             <Alert.Indicator />
             <Alert.Content>
-              <Alert.Title>{getAlertTitle(reviewBrief.status)}</Alert.Title>
+              <Alert.Title>{getAlertTitle(briefStatus)}</Alert.Title>
             </Alert.Content>
           </Alert.Root>
         </Field.Root>
@@ -133,6 +138,8 @@ function ReviewBriefView({ reviewBrief }) {
 }
 
 export function ReviewBriefContent({ session, reviewBrief }) {
+  const [briefStatus, setBriefStatus] = useState(reviewBrief.status);
+
   const handleChangeStatusClick = async (status) => {
     try {
       const result = await updateReviewBriefStatus(
@@ -140,7 +147,7 @@ export function ReviewBriefContent({ session, reviewBrief }) {
         reviewBrief.id,
         status
       );
-      window.location.reload();
+      setBriefStatus(status.toUpperCase());
     } catch (error) {
       console.error("Failed to update review brief status:", e);
     }
@@ -148,10 +155,10 @@ export function ReviewBriefContent({ session, reviewBrief }) {
 
   return (
     <Box mt="5">
-      <ReviewBriefView reviewBrief={reviewBrief} />
+      <ReviewBriefView reviewBrief={reviewBrief} briefStatus={briefStatus} />
 
       {[USER_ROLE.MODERATOR, USER_ROLE.ADMIN].includes(session.user.role) &&
-        reviewBrief.status === MODERATION_STATUS.NEW && (
+        briefStatus === MODERATION_STATUS.NEW && (
           <Flex mt="8" gap="8" justify="end">
             <Button
               variant="surface"

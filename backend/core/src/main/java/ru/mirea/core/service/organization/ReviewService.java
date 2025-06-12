@@ -30,6 +30,10 @@ public class ReviewService {
         this.briefService = briefService;
     }
 
+    public List<Review> getReviews() {
+        return reviewRepository.findAll();
+    }
+
     @Transactional
     public ReviewBrief createReview(
             UserDetails userDetails,

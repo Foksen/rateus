@@ -149,6 +149,10 @@ public class BriefService {
         return review;
     }
 
+    public List<ReviewBrief> getReviewBriefs() {
+        return reviewBriefRepository.findAll();
+    }
+
     public ReviewBrief getReviewBrief(UserDetails userDetails, UUID briefId) {
         ReviewBrief reviewBrief = reviewBriefRepository.findById(briefId)
                 .orElseThrow(() -> new RuntimeException("Review brief not found with id " + briefId));

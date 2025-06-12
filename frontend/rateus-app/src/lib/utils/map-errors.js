@@ -25,7 +25,7 @@ export const mapSignUpErrors = (error, setError) => {
     return;
   }
   if (errorLc.includes("максимальная длина имени - 32 символа")) {
-    setError("name", { message: "Максимальная длина имени — 32 символа" });
+    setError("name", { message: "Максимальная длина имени - 32 символа" });
     return;
   }
   if (errorLc.includes("имя содержит недопустимые символы")) {
@@ -33,7 +33,7 @@ export const mapSignUpErrors = (error, setError) => {
     return;
   }
   if (errorLc.includes("максимальная длина фамилии - 32 символа")) {
-    setError("surname", { message: "Максимальная длина фамилии — 32 символа" });
+    setError("surname", { message: "Максимальная длина фамилии - 32 символа" });
     return;
   }
   if (errorLc.includes("фамилия содержит недопустимые символы")) {
@@ -45,7 +45,7 @@ export const mapSignUpErrors = (error, setError) => {
     return;
   }
   if (errorLc.includes("допустимая длина пароля - от 8 до 32 символов")) {
-    setError("password", { message: "Длина пароля — от 8 до 32 символов" });
+    setError("password", { message: "Длина пароля - от 8 до 32 символов" });
     return;
   }
   setError("root", { message: "Произошла ошибка. Попробуйте ещё раз" });

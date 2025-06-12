@@ -17,8 +17,22 @@ export async function getOrganizationReviews(organizationId) {
   });
 }
 
+export async function getReviews(token) {
+  return backendFetch("/api/reviews", {
+    method: "GET",
+    accessToken: token,
+  });
+}
+
 export async function getSelfReviews(token) {
   return backendFetch("/api/reviews/self", {
+    method: "GET",
+    accessToken: token,
+  });
+}
+
+export async function getReviewBriefs(token) {
+  return backendFetch("/api/briefs/reviews", {
     method: "GET",
     accessToken: token,
   });
