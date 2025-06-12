@@ -43,6 +43,13 @@ export async function updateOrganization(token, id, data) {
   });
 }
 
+export async function getOrganizations(token) {
+  return backendFetch("/api/organizations", {
+    method: "GET",
+    accessToken: token,
+  });
+}
+
 export async function getSelfOrganizations(token) {
   return backendFetch("/api/organizations/self", {
     method: "GET",
@@ -67,6 +74,13 @@ export async function getPublicOrganizations(params) {
 export async function getPublicOrganization(id) {
   return backendFetch(`/api/organizations/public/${id}`, {
     method: "GET",
+  });
+}
+
+export async function getOrganizationBriefs(token) {
+  return backendFetch("/api/briefs/organizations", {
+    method: "GET",
+    accessToken: token,
   });
 }
 

@@ -16,6 +16,7 @@ import { TbStarFilled } from "react-icons/tb";
 import { OrganizationSlugGridItemView } from "./organization-slug-grid-item-view";
 import { ACCENT_COLOR } from "@/constants/ui";
 import { OrganizationSlugActionCreateReview } from "./orginazation-slug-action-create-review";
+import { isValidImageUrl } from "@/lib/utils/is-valid-url";
 
 const formatReviewCountView = (n) => {
   const last2 = n % 100;
@@ -71,7 +72,11 @@ export function OrganizationSlugView({ session, organization, reviews }) {
           >
             <Image
               w="full"
-              src={organization.photoUrl}
+              src={
+                (isValidImageUrl(organization.photoUrl) &&
+                  organization.photoUrl) ||
+                null
+              }
               alt="Фото организации"
               aspectRatio={16 / 9}
             />

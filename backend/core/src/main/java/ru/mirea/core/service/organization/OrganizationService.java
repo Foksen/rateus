@@ -40,6 +40,10 @@ public class OrganizationService {
         this.briefService = briefService;
     }
 
+    public List<Organization> getOrganizations() {
+        return organizationRepository.findAll();
+    }
+
     @Transactional
     public OrganizationBrief createOrganization(
             UserDetails userDetails,

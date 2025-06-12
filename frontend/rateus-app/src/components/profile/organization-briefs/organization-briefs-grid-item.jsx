@@ -1,19 +1,10 @@
 import { Tooltip } from "@/components/ui/tooltip";
 import { MODERATION_STATUS } from "@/constants/moderation-status";
 import { PROFILE_PAGE } from "@/constants/profile-pages";
-import {
-  Badge,
-  Card,
-  HStack,
-  Image,
-  Text,
-} from "@chakra-ui/react";
-import {
-  TbEye,
-  TbEyeCancel,
-  TbEyeCheck,
-} from "react-icons/tb";
+import { Badge, Card, HStack, Image, Text } from "@chakra-ui/react";
+import { TbEye, TbEyeCancel, TbEyeCheck } from "react-icons/tb";
 import Link from "next/link";
+import { isValidImageUrl } from "@/lib/utils/is-valid-url";
 
 const getStatusBadgeColor = (status) => {
   switch (status) {
@@ -69,7 +60,10 @@ export function OrganizationBriefsGridItem({ organizationBrief }) {
         transition="backgrounds"
       >
         <Image
-          src={organizationBrief.photoUrl}
+          src={
+            (isValidImageUrl(organizationBrief.photoUrl) && organizationBrief.photoUrl) ||
+            null
+          }
           alt="organizationBrief photo"
           aspectRatio={16 / 9}
         />

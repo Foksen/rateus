@@ -1,5 +1,6 @@
 import { Tooltip } from "@/components/ui/tooltip";
 import { PROFILE_PAGE } from "@/constants/profile-pages";
+import { isValidImageUrl } from "@/lib/utils/is-valid-url";
 import { pickPalette, pickRatingPalette } from "@/lib/utils/pick-palette";
 import {
   Badge,
@@ -52,11 +53,14 @@ function GridItemMenu({ id }) {
   );
 }
 
-export function OrganizationsGridItem({ organization }) {
+export function OrganizationsSelfGridItem({ organization }) {
   return (
     <Card.Root overflow="hidden" cursor="default" borderColor="border.muted">
       <Image
-        src={organization.photoUrl}
+        src={
+          (isValidImageUrl(organization.photoUrl) && organization.photoUrl) ||
+          null
+        }
         alt="Organization photo"
         aspectRatio={16 / 9}
       />

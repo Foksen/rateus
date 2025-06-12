@@ -1,7 +1,7 @@
 import { Grid } from "@chakra-ui/react";
-import { OrganizationsGridItem } from "./organizations-grid-item";
+import { OrganizationsAllGridItem } from "./organizations-all-grid-item";
 
-export function OrganizationsGrid({ organizations }) {
+export function OrganizationsAllGrid({ organizations }) {
   return (
     <Grid
       mt="6"
@@ -13,7 +13,7 @@ export function OrganizationsGrid({ organizations }) {
       gap="5"
     >
       {organizations?.map((organization, index) => (
-        <OrganizationsGridItem organization={organization} key={index} />
+        <OrganizationsAllGridItem organization={organization} key={index} />
       ))}
     </Grid>
   );

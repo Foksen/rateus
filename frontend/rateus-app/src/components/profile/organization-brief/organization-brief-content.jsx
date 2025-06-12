@@ -4,6 +4,7 @@ import { MODERATION_STATUS } from "@/constants/moderation-status";
 import { USER_ROLE } from "@/constants/user-roles";
 import { updateOrganizationBriefStatus } from "@/lib/api/organizations";
 import { formatDateTime } from "@/lib/utils/date-time-format";
+import { isValidImageUrl } from "@/lib/utils/is-valid-url";
 import { pickPalette } from "@/lib/utils/pick-palette";
 import {
   Alert,
@@ -66,7 +67,11 @@ function OrganizationBriefView({ organizationBrief }) {
 
         <Field.Root mt="3">
           <Image
-            src={organizationBrief.photoUrl}
+            src={
+              (isValidImageUrl(organizationBrief.photoUrl) &&
+                organizationBrief.photoUrl) ||
+              null
+            }
             alt="Фото огранизации"
             aspectRatio={16 / 9}
             rounded="xl"
