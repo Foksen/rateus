@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { OrganizationBriefsGrid } from "./organization-briefs-grid";
 
 export function OrganizationBriefsContent({ organizationBriefs }) {
