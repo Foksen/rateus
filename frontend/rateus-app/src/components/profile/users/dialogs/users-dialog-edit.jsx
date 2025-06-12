@@ -76,11 +76,11 @@ export function UsersDialogEdit({
       const response = await patchUser(session.token, user.id, {
         name: data.name,
         surname: data.surname,
-        email: data.email,
+        email: user?.userProvider === "YANDEX" ? null : data.email,
         avatarUrl: data.avatarUrl,
         isBlocked: data.isBlocked,
         userRole: data.userRole[0],
-        password: data.password,
+        password: user?.userProvider === "YANDEX" ? null : data.password,
       });
       updateUser(response.id, {
         id: response.id,
@@ -110,7 +110,9 @@ export function UsersDialogEdit({
         <Dialog.Positioner>
           <Dialog.Content as="form" onSubmit={onSubmit}>
             <Dialog.Header ref={headerRef} tabIndex="-1" outline="none">
-              <Dialog.Title textStyle="2xl">Изменить пользователя</Dialog.Title>
+              <Dialog.Title textStyle="2xl">
+                Изменение пользователя
+              </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
               <Fieldset.Root>
@@ -149,6 +151,7 @@ export function UsersDialogEdit({
                         required: "Введите почту",
                       })}
                       placeholder="email@example.com"
+                      disabled={user?.userProvider === "YANDEX" ? true : null}
                     />
                   </Field.Root>
 

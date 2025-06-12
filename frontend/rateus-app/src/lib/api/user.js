@@ -15,6 +15,13 @@ export async function getUsers(token) {
   });
 }
 
+export async function getSelfUser(token) {
+  return backendFetch("/api/users/self", {
+    method: "GET",
+    accessToken: token,
+  });
+}
+
 export async function deleteUser(token, id) {
   return backendFetch(`/api/users/${id}`, {
     method: "DELETE",

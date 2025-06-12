@@ -64,8 +64,8 @@ function UserProviderIcon({ provider }) {
       return (
         <Image
           alt="yandex"
-          width="20"
-          height="20"
+          width="24"
+          height="24"
           src="/svg/YandexIcon.svg"
           style={{ margin: "auto" }}
         />

@@ -1,7 +1,7 @@
 "use client";
 
 import { ProfileSidebarView } from "./profile-sidebar-view";
-import { BecomeOwnerAction } from "./profile-sidebar-become-owner-action";
+import { BecomeOwnerAction } from "./actions/profile-sidebar-become-owner-action";
 import { patchUser } from "@/lib/api/user";
 import { useRouter } from "next/navigation";
 

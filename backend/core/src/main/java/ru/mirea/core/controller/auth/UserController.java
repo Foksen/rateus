@@ -58,4 +58,12 @@ public class UserController {
     public void deleteUser(@PathVariable UUID userId) {
         userService.deleteUser(userId);
     }
+
+    @SecurityRequirement(name = "BearerAuth")
+    @GetMapping("/self")
+    public UserResponse getSelfUser(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return userMapper.map(userService.getSelfUser(userDetails));
+    }
 }
