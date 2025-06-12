@@ -16,7 +16,7 @@ import { OrganizationsSelfContainer } from "./organizations/self/organizations-s
 import { OrganizationSaveContainer } from "./organization-save/organization-save-containter";
 import { OrganizationBriefsContainer } from "./organization-briefs/organization-briefs-container";
 import { OrganizationBriefContainer } from "./organization-brief/organization-brief-container";
-import { ReviewsContainer } from "./reviews/reviews-container";
+import { ReviewsSelfContainer } from "./reviews/self/reviews-self-container";
 import {
   getReviewBrief,
   getSelfReviewBriefs,
@@ -94,7 +94,9 @@ export async function ProfilePageContainer({ profilePage, session }) {
   }
 
   if (profilePage[0] === PROFILE_PAGE.REVIEWS_SELF) {
-    return <ReviewsContainer reviews={await getSelfReviews(session.token)} />;
+    return (
+      <ReviewsSelfContainer reviews={await getSelfReviews(session.token)} />
+    );
   }
 
   if (profilePage[0] === PROFILE_PAGE.REVIEW_BRIEF) {

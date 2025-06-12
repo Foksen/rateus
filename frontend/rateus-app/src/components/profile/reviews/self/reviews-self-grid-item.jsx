@@ -17,7 +17,7 @@ import {
   TbZoomCheckFilled,
 } from "react-icons/tb";
 
-export function ReviewsGridItem({ review }) {
+export function ReviewsSelfGridItem({ review }) {
   return (
     <Link href={`/organizations/${review.organizationId}`}>
       <Card.Root

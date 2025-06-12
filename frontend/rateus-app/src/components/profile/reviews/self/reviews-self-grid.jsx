@@ -1,7 +1,7 @@
 import { Grid } from "@chakra-ui/react";
-import { ReviewsGridItem } from "./reviews-grid-item";
+import { ReviewsSelfGridItem } from "./reviews-self-grid-item";
 
-export function ReviewsGrid({ reviews }) {
+export function ReviewsSelfGrid({ reviews }) {
   return (
     <Grid
       mt="6"
@@ -13,7 +13,7 @@ export function ReviewsGrid({ reviews }) {
       gap="5"
     >
       {reviews?.map((review, index) => (
-        <ReviewsGridItem review={review} key={index} />
+        <ReviewsSelfGridItem review={review} key={index} />
       ))}
     </Grid>
   );
