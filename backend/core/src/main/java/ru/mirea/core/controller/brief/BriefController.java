@@ -76,6 +76,13 @@ public class BriefController {
     }
 
     @SecurityRequirement(name = "BearerAuth")
+    @GetMapping("/reviews")
+    public List<ReviewBriefResponse> getReviewBriefs() {
+        List<ReviewBrief> reviewBriefs = briefService.getReviewBriefs();
+        return briefMapper.mapReviewBriefs(reviewBriefs);
+    }
+
+    @SecurityRequirement(name = "BearerAuth")
     @GetMapping("/reviews/{briefId}")
     public ReviewBriefResponse getReviewBrief(
             @AuthenticationPrincipal UserDetails userDetails,

@@ -21,6 +21,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { LuExternalLink } from "react-icons/lu";
+import { useState } from "react";
 
 const getAlertStatus = (briefStatus) => {
   switch (briefStatus) {
@@ -50,17 +51,15 @@ const getAlertTitle = (briefStatus) => {
   }
 };
 
-function OrganizationBriefView({ organizationBrief }) {
+function OrganizationBriefView({ organizationBrief, briefStatus }) {
   return (
     <Fieldset.Root>
       <Fieldset.Content>
         <Field.Root>
-          <Alert.Root status={getAlertStatus(organizationBrief.status)}>
+          <Alert.Root status={getAlertStatus(briefStatus)}>
             <Alert.Indicator />
             <Alert.Content>
-              <Alert.Title>
-                {getAlertTitle(organizationBrief.status)}
-              </Alert.Title>
+              <Alert.Title>{getAlertTitle(briefStatus)}</Alert.Title>
             </Alert.Content>
           </Alert.Root>
         </Field.Root>
@@ -149,6 +148,8 @@ function OrganizationBriefView({ organizationBrief }) {
 }
 
 export function OrganizationBriefContent({ session, organizationBrief }) {
+  const [briefStatus, setBriefStatus] = useState(organizationBrief.status);
+
   const handleChangeStatusClick = async (status) => {
     try {
       const result = await updateOrganizationBriefStatus(
@@ -156,7 +157,7 @@ export function OrganizationBriefContent({ session, organizationBrief }) {
         organizationBrief.id,
         status
       );
-      window.location.reload();
+      setBriefStatus(status.toUpperCase());
     } catch (error) {
       console.error("Failed to update organization brief status:", e);
     }
@@ -164,10 +165,13 @@ export function OrganizationBriefContent({ session, organizationBrief }) {
 
   return (
     <Box mt="5">
-      <OrganizationBriefView organizationBrief={organizationBrief} />
+      <OrganizationBriefView
+        organizationBrief={organizationBrief}
+        briefStatus={briefStatus}
+      />
 
       {[USER_ROLE.MODERATOR, USER_ROLE.ADMIN].includes(session.user.role) &&
-        organizationBrief.status === MODERATION_STATUS.NEW && (
+        briefStatus === MODERATION_STATUS.NEW && (
           <Flex mt="8" gap="8" justify="end">
             <Button
               variant="surface"

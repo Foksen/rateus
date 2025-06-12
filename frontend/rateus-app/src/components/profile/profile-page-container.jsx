@@ -16,9 +16,11 @@ import { OrganizationsSelfContainer } from "./organizations/self/organizations-s
 import { OrganizationSaveContainer } from "./organization-save/organization-save-containter";
 import { OrganizationBriefsContainer } from "./organization-briefs/organization-briefs-container";
 import { OrganizationBriefContainer } from "./organization-brief/organization-brief-container";
-import { ReviewsContainer } from "./reviews/reviews-container";
+import { ReviewsSelfContainer } from "./reviews/self/reviews-self-container";
 import {
   getReviewBrief,
+  getReviewBriefs,
+  getReviews,
   getSelfReviewBriefs,
   getSelfReviews,
 } from "@/lib/api/reviews";
@@ -26,6 +28,7 @@ import { ReviewBriefsContainer } from "./review-briefs/review-briefs-container";
 import { ReviewBriefContainer } from "./review-brief/review-brief-container";
 import { getUsers } from "@/lib/api/user";
 import { OrganizationsAllContainer } from "./organizations/all/organizations-all-container";
+import { ReviewsAllContainer } from "./reviews/all/reviews-all-container";
 
 export async function ProfilePageContainer({ profilePage, session }) {
   if (!Array.isArray(profilePage)) {
@@ -93,8 +96,14 @@ export async function ProfilePageContainer({ profilePage, session }) {
     );
   }
 
+  if (profilePage[0] === PROFILE_PAGE.REVIEWS) {
+    return <ReviewsAllContainer reviews={await getReviews(session.token)} />;
+  }
+
   if (profilePage[0] === PROFILE_PAGE.REVIEWS_SELF) {
-    return <ReviewsContainer reviews={await getSelfReviews(session.token)} />;
+    return (
+      <ReviewsSelfContainer reviews={await getSelfReviews(session.token)} />
+    );
   }
 
   if (profilePage[0] === PROFILE_PAGE.REVIEW_BRIEF) {
@@ -103,6 +112,14 @@ export async function ProfilePageContainer({ profilePage, session }) {
       <ReviewBriefContainer
         session={session}
         reviewBrief={await getReviewBrief(session.token, id)}
+      />
+    );
+  }
+
+  if (profilePage[0] === PROFILE_PAGE.REVIEW_BRIEFS) {
+    return (
+      <ReviewBriefsContainer
+        reviewBriefs={await getReviewBriefs(session.token)}
       />
     );
   }

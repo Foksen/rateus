@@ -46,6 +46,7 @@ export function SettingsActionEdit({ user, session }) {
         surname: user.surname,
         email: user.email,
         avatarUrl: user.avatarUrl,
+        password: null,
       }) ||
       {},
   });
@@ -57,6 +58,7 @@ export function SettingsActionEdit({ user, session }) {
         surname: user.surname,
         email: user.email,
         avatarUrl: user.avatarUrl,
+        password: null,
       });
     }
   }, [user, reset]);
@@ -69,6 +71,10 @@ export function SettingsActionEdit({ user, session }) {
         email: user?.userProvider === "YANDEX" ? null : data.email,
         avatarUrl: data.avatarUrl,
         password: user?.userProvider === "YANDEX" ? null : data.password,
+        password:
+          user?.userProvider === "YANDEX" || !data.password
+            ? null
+            : data.password,
       });
       router.push("/oauth/callback/logout?redirect=/auth/sign-in");
     } catch (error) {

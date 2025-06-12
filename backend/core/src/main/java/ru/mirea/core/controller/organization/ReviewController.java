@@ -34,6 +34,13 @@ public class ReviewController {
     }
 
     @SecurityRequirement(name = "BearerAuth")
+    @GetMapping
+    public List<ReviewResponse> getReviews() {
+        List<Review> reviews = reviewService.getReviews();
+        return reviewMapper.map(reviews);
+    }
+
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     public ReviewBriefResponse createReview(
             @AuthenticationPrincipal UserDetails userDetails,

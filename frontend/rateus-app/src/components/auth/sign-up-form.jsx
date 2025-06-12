@@ -36,6 +36,7 @@ export function SignUpForm({}) {
       setError("repeatedPassword", {
         message: "Пароли не совпадают",
       });
+      setIsLoading(false);
       return;
     }
 

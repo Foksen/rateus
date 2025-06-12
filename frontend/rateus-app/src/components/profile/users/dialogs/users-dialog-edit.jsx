@@ -54,6 +54,7 @@ export function UsersDialogEdit({
         avatarUrl: user.avatarUrl,
         isBlocked: user.isBlocked,
         userRole: [user.userRole],
+        password: null,
       }) ||
       {},
   });
@@ -67,6 +68,7 @@ export function UsersDialogEdit({
         avatarUrl: user.avatarUrl,
         isBlocked: user.isBlocked,
         userRole: [user.userRole],
+        password: null,
       });
     }
   }, [user, reset]);
@@ -80,7 +82,10 @@ export function UsersDialogEdit({
         avatarUrl: data.avatarUrl,
         isBlocked: data.isBlocked,
         userRole: data.userRole[0],
-        password: user?.userProvider === "YANDEX" ? null : data.password,
+        password:
+          user?.userProvider === "YANDEX" || !data.password
+            ? null
+            : data.password,
       });
       updateUser(response.id, {
         id: response.id,
