@@ -38,6 +38,13 @@ public class OrganizationController {
     }
 
     @SecurityRequirement(name = "BearerAuth")
+    @GetMapping
+    public List<OrganizationResponse> getOrganizations() {
+        List<Organization> organizations = organizationService.getOrganizations();
+        return organizationMapper.map(organizations);
+    }
+
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     public OrganizationBriefResponse createOrganization(
             @AuthenticationPrincipal UserDetails userDetails,

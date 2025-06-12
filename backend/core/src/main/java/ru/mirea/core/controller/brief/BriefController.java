@@ -40,6 +40,13 @@ public class BriefController {
     }
 
     @SecurityRequirement(name = "BearerAuth")
+    @GetMapping("/organizations")
+    public List<OrganizationBriefResponse> getOrganizationBriefs() {
+        List<OrganizationBrief> organizationBriefs = briefService.getOrganizationBriefs();
+        return briefMapper.mapOrganizationBriefs(organizationBriefs);
+    }
+
+    @SecurityRequirement(name = "BearerAuth")
     @GetMapping("/organizations/{briefId}")
     public OrganizationBriefResponse getOrganizationBrief(
             @AuthenticationPrincipal UserDetails userDetails,

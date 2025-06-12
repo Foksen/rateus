@@ -82,6 +82,10 @@ public class BriefService {
         return organization;
     }
 
+    public List<OrganizationBrief> getOrganizationBriefs() {
+        return organizationBriefRepository.findAll();
+    }
+
     public OrganizationBrief getOrganizationBrief(UserDetails userDetails, UUID briefId) {
         OrganizationBrief organizationBrief = organizationBriefRepository.findById(briefId)
                 .orElseThrow(() -> new RuntimeException("Organization brief not found with id " + briefId));
